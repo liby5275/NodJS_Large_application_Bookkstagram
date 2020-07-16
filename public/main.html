@@ -27,8 +27,8 @@
 
                 </div>
                 <div class="rightContent" id="rightContent">
-                    <form action="/action_page.php">
-                        <input type="text" placeholder="Search.." name="search">
+                    <form class="searchForm" id="searchForm">
+                        <input type="text" placeholder="Find your friend.." name="search">
                         <button type="submit"><i class="fa fa-search"></i></button>
                       </form>
                 </div>
@@ -56,6 +56,8 @@
             var author = getParameterByName('author').split('?');
             var book = getParameterByName('book').split('?');
             this.saveUserData(userName[0], genre[0], author[0], book[0]);
+            this.addContact(userName[0],'anu')
+            //this.fetchContactList(userName);
         </script>
         
     </body>

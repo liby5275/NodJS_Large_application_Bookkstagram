@@ -4,6 +4,8 @@ const express = require('express')
 const socket = require('socket.io')
 const userDependency = require('./user')
 const roomDependency = require('./room')
+const contactDependency = require('./contact')
+
 
 
 const app = express()
@@ -23,16 +25,25 @@ io.on('connect', (socket) => {
 
     socket.on('joined', async ({ name, genre, author, book }, callback) => {
         const _id = socket.id
-        const istaken =  await userDependency.isUsernameAlreadyTaken(name);
-        console.log('is taken value is '+istaken)    
+        const istaken =  await userDependency.isUsernameAlreadyTaken(name);  
                 if (istaken) {
                     socket.emit('warning', 'This username already taken. Take another one')
                 } else {
-                    console.log('new user');
                     await userDependency.addUser(_id, name, genre, author, book)
                     socket.emit('joincompleted', name)
                 }
         
+
+    })
+
+    socket.on('fetchContact',userName => {
+
+    })
+
+
+    socket.on('addContact',async ({userName,contact}) => {
+
+        await contactDependency.addContact(userName,contact);
 
     })
 

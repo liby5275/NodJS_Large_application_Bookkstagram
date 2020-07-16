@@ -38,7 +38,7 @@ li a:hover {
 
 .outerContent{
     display: flex;
-    width: 100vw;
+    width: 99vw;
     height: 70vh;
     display: flex;
     justify-content: center;
@@ -48,17 +48,34 @@ li a:hover {
 
 .leftContent{
     width:20vw;
+    border-radius: 41px;
 }
 .centerContent{
-    background-image: url('/images/main.jpg');
+background-image: url('/images/main.jpg');
 height: 100%;
 background-position: center;
 background-repeat: no-repeat;
 background-size: cover;
 opacity: 0.5;
-    width:60vw;
+width:60vw;
+border-radius: 41px;
 }
+
 .rightContent{
-    background:#eae3e3;
-    width:20vw;
+background-image: url('/images/search_bg.jpeg');
+height: 100%;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+width:20vw;
+border-left-style: outset;
+border-top-style: outset;
+border-left-width: 10px;
+border-top-width: 10px;
+border-left-color: darkgray;
+border-top-color: darkgray;
+border-radius: 41px;
+}
+.searchForm{
+    margin: 20 0 0 10px;
 }
