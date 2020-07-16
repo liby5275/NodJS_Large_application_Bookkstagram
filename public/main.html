@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <link rel="Stylesheet" href="./css/main.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class = "container" id="container">
+            <div class="dummy" id ="dummy">
+
+            </div>
+            <div class="navigation" id = "navigation">
+            <ul class="navBar" id="navBar">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">My Books</a></li>
+                <li><a href="#">Random Chat</a></li>
+                <li><a href="#">Contacts</a></li>
+                <li><a href="#">Explore</a></li>
+                <li><a href="#">Logout</a></li>
+              </ul>
+            </div>
+
+            <div class="outerContent" id="outerContent">
+                <div class="leftContent" id="leftContent">
+
+                </div>
+                <div class="centerContent" id="centerContent">
+
+                </div>
+                <div class="rightContent" id="rightContent">
+                    <form action="/action_page.php">
+                        <input type="text" placeholder="Search.." name="search">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                      </form>
+                </div>
+            </div>
+        </div>       
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
+        <script src="socket.io/socket.io.js"></script>
+        <script src="/js/main.js"></script>
+        <script type="text/javascript">
+            //function to get the paramaters passed to this html through window.location.href
+    
+            function getParameterByName(name, url) {
+                if (!url) url = window.location.href;
+                name = name.replace(/[\[\]]/g, '\\$&');
+                var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, ' '));
+            }
+    
+            var userName = getParameterByName('name').split('?');
+            var genre = getParameterByName('genre').split('?');
+            var author = getParameterByName('author').split('?');
+            var book = getParameterByName('book').split('?');
+            this.saveUserData(userName[0], genre[0], author[0], book[0]);
+        </script>
+        
+    </body>
+</html>

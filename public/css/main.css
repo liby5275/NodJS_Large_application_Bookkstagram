@@ -1,0 +1,64 @@
+.container{
+    background-color:#e4e5e6;
+
+}
+
+.dummy{
+    height: 60px;
+}
+
+.navigation{
+    display: table;
+    margin: 0 auto;
+}
+
+ul#navBar{
+    list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: #f1f1f1;
+}
+ul#navBar li{
+    float: left;
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color on hover */
+li a:hover {
+  background-color: #555;
+  color: white;
+}
+
+.outerContent{
+    display: flex;
+    width: 100vw;
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    margin-top: 35px;
+
+}
+
+.leftContent{
+    width:20vw;
+}
+.centerContent{
+    background-image: url('/images/main.jpg');
+height: 100%;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+opacity: 0.5;
+    width:60vw;
+}
+.rightContent{
+    background:#eae3e3;
+    width:20vw;
+}
