@@ -1,7 +1,6 @@
 const fs = require('fs')
 
 const addContact = (userName, contact) => {
-    console.log(userName+" :: "+contact)
 
     const contacts = getContactsList()
 
@@ -23,7 +22,7 @@ const addContact = (userName, contact) => {
 
     } else {
 
-        console.log('already present')
+        
         removeUser(userName);
         contactsNew = getContactsList();
         console.log('bla'+contactsNew);
@@ -46,8 +45,6 @@ const getContactsList = () =>{
         const contactsBuffer = fs.readFileSync('files/contacts.json')
         const contactsJson = contactsBuffer.toString()
         const contacts = JSON.parse(contactsJson)
-        console.log('returning cont' +contacts.length)
-        console.log('returning cont' +contacts[0].userName)
         return contacts;
     } catch(e) {
         console.log('getContactList : no such file present in the system')
@@ -57,12 +54,10 @@ const getContactsList = () =>{
 
 const removeUser = (userName) => {
     const contacts = getContactsList()
-
-    console.log('about to remove '+userName)
     const contactsAfterRemoval = contacts.filter((item) =>{
         return item.userName != userName;
     })
-    console.log('after rem '+contactsAfterRemoval.length)
+    
     if(contactsAfterRemoval.length < contacts.length){
         fs.writeFileSync('files/contacts.json', JSON.stringify(contactsAfterRemoval))
     } else {

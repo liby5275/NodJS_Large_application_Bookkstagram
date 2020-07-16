@@ -26,7 +26,7 @@ io.on('connect', (socket) => {
     socket.on('joined', async ({ name, genre, author, book }, callback) => {
         const _id = socket.id
         const istaken =  await userDependency.isUsernameAlreadyTaken(name);  
-                if (istaken) {
+                if (istaken || istaken === 'true') {
                     socket.emit('warning', 'This username already taken. Take another one')
                 } else {
                     await userDependency.addUser(_id, name, genre, author, book)
@@ -36,8 +36,15 @@ io.on('connect', (socket) => {
 
     })
 
-    socket.on('fetchContact',userName => {
+    socket.on('fetchContact',async(userName) => {
 
+        var contacts = await contactDependency.getContactsList();
+        const userData = contacts.filter((item) =>{
+            return item.userName === userName;
+        })
+
+        
+        socket.emit('contactList',userData)
     })
 
 

@@ -76,6 +76,34 @@ border-left-color: darkgray;
 border-top-color: darkgray;
 border-radius: 41px;
 }
+
 .searchForm{
     margin: 20 0 0 10px;
 }
+
+.list-title{
+    padding-left: 13px;
+    color: #83878eeb;
+    padding-top: 30px;
+}
+
+.users{
+    padding-left: 10px;
+}
+
+.users li{
+    background-image: url(/images/dark.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 10px;
+    list-style-type: none;
+    color: #d3d3e0;
+    font-variant-caps: all-small-caps;
+    font-size: large;
+    margin-bottom: 10px;
+    padding: 16px;
+}
+
+
+

@@ -1,14 +1,16 @@
 <html>
-    <head>
-        <link rel="Stylesheet" href="./css/main.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    </head>
-    <body>
-        <div class = "container" id="container">
-            <div class="dummy" id ="dummy">
 
-            </div>
-            <div class="navigation" id = "navigation">
+<head>
+    <link rel="Stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="dummy" id="dummy">
+
+        </div>
+        <div class="navigation" id="navigation">
             <ul class="navBar" id="navBar">
                 <li><a href="#">Home</a></li>
                 <li><a href="#">My Books</a></li>
@@ -16,49 +18,62 @@
                 <li><a href="#">Contacts</a></li>
                 <li><a href="#">Explore</a></li>
                 <li><a href="#">Logout</a></li>
-              </ul>
+            </ul>
+        </div>
+
+        <div class="outerContent" id="outerContent">
+            <div class="leftContent" id="leftContent">
+
             </div>
+            <div class="centerContent" id="centerContent">
 
-            <div class="outerContent" id="outerContent">
-                <div class="leftContent" id="leftContent">
+            </div>
+            <div class="rightContent" id="rightContent">
+                <form class="searchForm" id="searchForm">
+                    <input type="text" placeholder="Find your friend.." name="search">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+                <div class="contactListBar" id = "contactListBar">
 
-                </div>
-                <div class="centerContent" id="centerContent">
-
-                </div>
-                <div class="rightContent" id="rightContent">
-                    <form class="searchForm" id="searchForm">
-                        <input type="text" placeholder="Find your friend.." name="search">
-                        <button type="submit"><i class="fa fa-search"></i></button>
-                      </form>
                 </div>
             </div>
-        </div>       
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
-        <script src="socket.io/socket.io.js"></script>
-        <script src="/js/main.js"></script>
-        <script type="text/javascript">
-            //function to get the paramaters passed to this html through window.location.href
-    
-            function getParameterByName(name, url) {
-                if (!url) url = window.location.href;
-                name = name.replace(/[\[\]]/g, '\\$&');
-                var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-                    results = regex.exec(url);
-                if (!results) return null;
-                if (!results[2]) return '';
-                return decodeURIComponent(results[2].replace(/\+/g, ' '));
-            }
-    
-            var userName = getParameterByName('name').split('?');
-            var genre = getParameterByName('genre').split('?');
-            var author = getParameterByName('author').split('?');
-            var book = getParameterByName('book').split('?');
-            this.saveUserData(userName[0], genre[0], author[0], book[0]);
-            this.addContact(userName[0],'anu')
-            //this.fetchContactList(userName);
-        </script>
-        
-    </body>
+        </div>
+    </div>
+
+    <script id="contactlistBar-template" type="text/html"> 
+        <h3 class="list-title" id = "list-title">   Your Contact Book</h3>
+        <ul class="users" id="users">
+            {{#contactList}}
+                <li>{{.}}</li>  
+          {{/contactList}}
+        </ul> </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="/js/main.js"></script>
+    <script type="text/javascript">
+        //function to get the paramaters passed to this html through window.location.href
+
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        var userName = getParameterByName('name').split('?');
+        var genre = getParameterByName('genre').split('?');
+        var author = getParameterByName('author').split('?');
+        var book = getParameterByName('book').split('?');
+        this.saveUserData(userName[0], genre[0], author[0], book[0]);
+        //this.addContact(userName[0],'anu')
+        this.fetchAndDisplayContactList(userName[0]);
+    </script>
+
+</body>
+
 </html>
