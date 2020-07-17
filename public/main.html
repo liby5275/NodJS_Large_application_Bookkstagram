@@ -66,9 +66,19 @@
         }
 
         var userName = getParameterByName('name').split('?');
-        var genre = getParameterByName('password').split('?');
-        //var author = getParameterByName('author').split('?');
-        //var book = getParameterByName('book').split('?');
+        var password = getParameterByName('password').split('?');
+        var type = getParameterByName('type').split('?');
+        if(type[0] === 'new'){
+            console.log('new user')
+            var genre = getParameterByName('genre').split('?');
+            var author = getParameterByName('author').split('?');
+            var book = getParameterByName('book').split('?');
+            this.saveUserData(userName[0],password[0], genre[0], author[0], book[0]);
+        }else {
+            console.log('existing user')
+            this.validateLoginCreds(userName[0],password[0]);
+        }
+        
         //this.saveUserData(userName[0], genre[0], author[0], book[0]);
         //this.addContact(userName[0],'anu')
         //this.fetchAndDisplayContactList(userName[0]);

@@ -1,7 +1,7 @@
 var userList = []
 
-const addUser = (id, name, genre, author, book) => {
-    const user = { id, name, genre, author, book }
+const addUser = (id, name, password, genre, author, book) => {
+    const user = { id, name, password, genre, author, book }
     userList.push(user)
 }
 
@@ -25,10 +25,22 @@ const fetchUser = function(id) {
     return roomname
 }
 
+
 const fetchUSerList = () => {
     userList.forEach(user => {
         console.log(user.id + ' ' + user.name + ' ' + user.room)
     })
+}
+
+const validateUserCreds = async (userName, password) =>{
+    let validUser = false;
+    userList.forEach(user=>{
+        if(user.name === userName && user.password === password){
+            validUser = true;
+        }
+    }) 
+
+    return validUser;
 }
 
 const isUsernameAlreadyTaken = async (name) => {
@@ -41,8 +53,7 @@ const isUsernameAlreadyTaken = async (name) => {
         }
     })
 
-    return res;
-      
+    return res; 
 }
 
 const findCountOfUsersInaRoom = (room)=>{
@@ -74,5 +85,6 @@ module.exports = {
     fetchUser: fetchUser,
     fetchUSerList: fetchUSerList,
     findCountOfUsersInaRoom:findCountOfUsersInaRoom,
-    getUsersInaRoom:getUsersInaRoom
+    getUsersInaRoom:getUsersInaRoom,
+    validateUserCreds:validateUserCreds
 }

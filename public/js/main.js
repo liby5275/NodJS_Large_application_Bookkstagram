@@ -20,17 +20,25 @@ socket.on('contactList', (userData) => {
     contactListBarElement.innerHTML = html
 })
 
-function saveUserData(userNAme, genre, author, book) {
+function saveUserData(userNAme,password, genre, author, book) {
     console.log('out to save the user details')
 
     socket.emit('joined', {
         name: userNAme,
+        password: password,
         genre: genre,
         author:author,
         book:book
     }, (callback) => {
         
         console.log(callback)
+    })
+}
+
+function validateLoginCreds(userName, password) {
+    socket.emit('validateCreds', {
+        name: userName,
+        password: password
     })
 }
 

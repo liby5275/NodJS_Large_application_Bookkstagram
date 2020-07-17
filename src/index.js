@@ -23,17 +23,28 @@ io.on('connect', (socket) => {
 
     socket.emit('message', 'Welcome to the Chat App')
 
-    socket.on('joined', async ({ name, genre, author, book }, callback) => {
+    socket.on('joined', async ({ name, password, genre, author, book }, callback) => {
         const _id = socket.id
         const istaken =  await userDependency.isUsernameAlreadyTaken(name);  
                 if (istaken || istaken === 'true') {
                     socket.emit('warning', 'This username already taken. Take another one')
                 } else {
-                    await userDependency.addUser(_id, name, genre, author, book)
+                    await userDependency.addUser(_id, name, password, genre, author, book)
                     socket.emit('joincompleted', name)
                 }
         
 
+    })
+
+    socket.on('validateCreds', async ({userName,password}, callback) => {
+        console.log('validation '+userName+' '+password)
+        const isValidUser = await userDependency.validateUserCreds(userName,password);
+        console.log('isvalid '+isValidUser)
+        if (isValidUser || isValidUser === 'true') {
+            
+        } else {
+            socket.emit('warning', 'Invalid credentials. Please try again')
+        }
     })
 
     socket.on('fetchContact',async(userName) => {
