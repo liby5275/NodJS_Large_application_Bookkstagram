@@ -23,13 +23,15 @@ io.on('connect', (socket) => {
 
     socket.emit('message', 'Welcome to the Chat App')
 
-    socket.on('joined', async ({ name, password, genre, author, book }, callback) => {
+    socket.on('joined', async ({ name, password, genre, author, book, lastReadBook }, callback) => {
+        console.log('last'+lastReadBook)
         const _id = socket.id
         const istaken =  await userDependency.isUsernameAlreadyTaken(name);  
                 if (istaken || istaken === 'true') {
                     socket.emit('warning', 'This username already taken. Take another one')
                 } else {
-                    await userDependency.addUser(_id, name, password, genre, author, book)
+                    console.log('lastBook'+lastReadBook)
+                    await userDependency.addUser(_id, name, password, genre, author, book, lastReadBook)
                     socket.emit('joincompleted', name)
                 }
         
@@ -68,6 +70,11 @@ io.on('connect', (socket) => {
         const userProfileDetails = await userDependency.fetchUser(profileName);
         socket.emit('profileDetails',userProfileDetails)
 
+    })
+
+    socket.on('fetchCompleteUserList', async () => {
+        const userList = await userDependency.getUserDataList();
+        socket.emit('completeUserList', userList)
     })
 
     socket.on('location', (coords, callback) => {

@@ -1,6 +1,5 @@
 .container{
     background-color:#e4e5e6;
-
 }
 
 .dummy{
@@ -120,6 +119,18 @@ border-radius: 41px;
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 38px;
+    border-left-width: 8px;
+    border-left-style: groove;
+    border-left-color: #cccccc;
+    border-top-style: groove;
+    border-top-color: #cccccc;
+    border-top-width: 8px;
+    border-bottom-style: groove;
+    border-bottom-width: 8px;
+    border-bottom-color: #cccccc;
+    border-right-style: groove;
+    border-right-width: 8px;
+    border-right-color: #cccccc;
 }
 /*define the modal-content background*/ 
 
@@ -148,5 +159,41 @@ border-radius: 41px;
     cursor: pointer; 
 } 
 
+
+#profileName{
+    margin-left:30%;
+    margin-top:-15%;
+    color: #d3d3e0;
+}
+
+#myImg{
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+#favGenre{
+    margin-top:10%;
+    margin-left:30%;
+    color: #d3d3e0;
+}
+#favAuthor,
+#favBook,
+#lastReadBook{
+    margin-left:30%;
+    color: #d3d3e0;
+}
+
+.ui-menu .ui-menu-item-wrapper {
+    position: relative;
+    padding: 3px 1em 3px .4em;
+    background-image: url(/images/dark.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #d3d3e0;
+    border-bottom-width: 6px;
+    border-bottom-color: #d3d3e0;
+    
+}
 
 

@@ -51,7 +51,8 @@ confirmdButton.addEventListener('click',e =>{
         userRegisterForm.querySelector('#confirmButton').style.display="none"
         userRegisterForm.querySelector('#genre').style.display="block"  
         userRegisterForm.querySelector('#author').style.display="block"
-        userRegisterForm.querySelector('#book').style.display="block"  
+        userRegisterForm.querySelector('#book').style.display="block" 
+        userRegisterForm.querySelector('#lastReadBook').style.display="block"  
         userRegisterForm.querySelector('#registerButton').style.display="block"
     } else{
         alert('passwor does not match. please reenter');
@@ -68,7 +69,8 @@ registerButton.addEventListener('click',e=>{
         var genre = userRegisterForm.querySelector('#genre').value;
         var author = userRegisterForm.querySelector('#author').value;
         var book = userRegisterForm.querySelector('#book').value;
-        window.location.href="main.html?name=" + name+'?password='+password+'?genre='+genre+'?author='+author+'?book='+book+'?type=new';
+        var lastReadBook = userRegisterForm.querySelector('#lastReadBook').value;
+        window.location.href="main.html?name=" + name+'?password='+password+'?genre='+genre+'?author='+author+'?lastReadBook='+lastReadBook+'?book='+book+'?type=new';
 })
 
 function register(){

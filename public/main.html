@@ -22,6 +22,7 @@
         </div>
 
         <div class="outerContent" id="outerContent">
+            
             <div class="leftContent" id="leftContent">
 
             </div>
@@ -29,25 +30,26 @@
                 <div id="userProfile" class="modal">
                     <span onclick="document.getElementById('userProfile').style.display='none'" class="close"
                         title="Close Modal">×</span>
-                    <form class="modal-content animate" id="addUserForm">
-                        <div class="container">
-                            <h1 id="profileName"></h1>
-                            
-                        </div>
-                    </form>
+                        <img id="myImg" src="" width="130" height="130">
+                            <div><h1 id="profileName"></h1></div>
+                            <p id="favGenre"></p>
+                            <p id="favAuthor"></p>
+                            <p id="favBook"></p>
+                            <p id="lastReadBook"></p>
                 </div>
-
             </div>
             <div class="rightContent" id="rightContent">
                 <form class="searchForm" id="searchForm">
-                    <input type="text" placeholder="Find your friend.." name="search">
-                    <button type="submit"><i class="fa fa-search"></i></button>
+                    <input type="text" placeholder="Find your friend.." name="search" id="search">
+                    <button type="submit" id="searchButton"><i class="fa fa-search"></i></button>
                 </form>
                 <div class="contactListBar" id = "contactListBar">
 
                 </div>
             </div>
         </div>
+        
+        
     </div>
 
     <script id="contactlistBar-template" type="text/html"> 
@@ -63,6 +65,11 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script type="text/javascript" src="./js/jquery.easing.1.3.js"></script>
     <script src="socket.io/socket.io.js"></script>
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="/js/main.js"></script>
     <script type="text/javascript">
         //function to get the paramaters passed to this html through window.location.href
@@ -85,12 +92,15 @@
             var genre = getParameterByName('genre').split('?');
             var author = getParameterByName('author').split('?');
             var book = getParameterByName('book').split('?');
-            this.saveUserData(userName[0],password[0], genre[0], author[0], book[0]);
+            var lastReadBook = getParameterByName('lastReadBook').split('?')
+            console.log('last book '+lastReadBook[0])
+            this.saveUserData(userName[0],password[0], genre[0], author[0], book[0], lastReadBook[0]);
         }else {
             console.log('existing user with '+userName[0] + password[0])
             this.validateLoginCreds(userName[0],password[0]);
         }
         this.fetchAndDisplayContactList(userName[0]);
+        this.fetchAndStoreCompleteUserList();
         
         //this.saveUserData(userName[0], genre[0], author[0], book[0]);
         //this.addContact(userName[0],'anu')

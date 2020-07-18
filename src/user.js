@@ -1,9 +1,9 @@
 const fs = require('fs')
 
-const addUser = (id, name, password, genre, author, book) => {
+const addUser = (id, name, password, genre, author, book, lastReadBook) => {
 
     const userList = getUserDataList();
-    const user = { id, name, password, genre, author, book }
+    const user = { id, name, password, genre, author, book, lastReadBook }
     userList.push(user);
     fs.writeFileSync('files/userData.json', JSON.stringify(userList))
 
@@ -72,6 +72,8 @@ const fetchUser = function(name) {
 
 
 
+
+
 /* const findCountOfUsersInaRoom = (room)=>{
     let count =0;
     userList.forEach(user=>{
@@ -101,5 +103,6 @@ module.exports = {
     addUser: addUser,
     validateUserCreds:validateUserCreds,
     removeUser:removeUser,
-    fetchUser:fetchUser
+    fetchUser:fetchUser,
+    getUserDataList:getUserDataList
 }
