@@ -26,6 +26,16 @@
 
             </div>
             <div class="centerContent" id="centerContent">
+                <div id="userProfile" class="modal">
+                    <span onclick="document.getElementById('userProfile').style.display='none'" class="close"
+                        title="Close Modal">×</span>
+                    <form class="modal-content animate" id="addUserForm">
+                        <div class="container">
+                            <h1 id="profileName"></h1>
+                            
+                        </div>
+                    </form>
+                </div>
 
             </div>
             <div class="rightContent" id="rightContent">
@@ -44,12 +54,14 @@
         <h3 class="list-title" id = "list-title">   Your Contact Book</h3>
         <ul class="users" id="users">
             {{#contactList}}
-                <li>{{.}}</li>  
+                <li class="contactItem">{{.}}</li>  
           {{/contactList}}
         </ul> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/jquery.easing.1.3.js"></script>
     <script src="socket.io/socket.io.js"></script>
     <script src="/js/main.js"></script>
     <script type="text/javascript">
@@ -75,13 +87,14 @@
             var book = getParameterByName('book').split('?');
             this.saveUserData(userName[0],password[0], genre[0], author[0], book[0]);
         }else {
-            console.log('existing user')
+            console.log('existing user with '+userName[0] + password[0])
             this.validateLoginCreds(userName[0],password[0]);
         }
+        this.fetchAndDisplayContactList(userName[0]);
         
         //this.saveUserData(userName[0], genre[0], author[0], book[0]);
         //this.addContact(userName[0],'anu')
-        //this.fetchAndDisplayContactList(userName[0]);
+        //
     </script>
 
 </body>

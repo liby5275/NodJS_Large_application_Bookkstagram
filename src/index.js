@@ -36,10 +36,8 @@ io.on('connect', (socket) => {
 
     })
 
-    socket.on('validateCreds', async ({userName,password}, callback) => {
-        console.log('validation '+userName+' '+password)
-        const isValidUser = await userDependency.validateUserCreds(userName,password);
-        console.log('isvalid '+isValidUser)
+    socket.on('validateCreds', async ({name,password}, callback) => {
+        const isValidUser = await userDependency.validateUserCreds(name,password);
         if (isValidUser || isValidUser === 'true') {
             
         } else {
@@ -62,6 +60,13 @@ io.on('connect', (socket) => {
     socket.on('addContact',async ({userName,contact}) => {
 
         await contactDependency.addContact(userName,contact);
+
+    })
+
+    socket.on('getUserDetails', async (profileName) =>{
+
+        const userProfileDetails = await userDependency.fetchUser(profileName);
+        socket.emit('profileDetails',userProfileDetails)
 
     })
 
@@ -92,7 +97,7 @@ io.on('connect', (socket) => {
     })  
 
     socket.on('disconnect', () => {
-        const _id = socket.id
+        /* const _id = socket.id
         //console.log('disconnecting id is ' + username)
         userDependency.removeUser(_id)
         const countOfusersInthisroom = userDependency.findCountOfUsersInaRoom(userroom)
@@ -108,7 +113,7 @@ io.on('connect', (socket) => {
         io.to(userroom).emit('userlist', {
             room: userroom,
             userList: userDependency.getUsersInaRoom(userroom)
-        })
+        }) */
     })
 
     

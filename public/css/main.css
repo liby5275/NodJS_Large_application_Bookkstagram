@@ -106,5 +106,47 @@ border-radius: 41px;
     padding: 16px;
 }
 
+.modal { 
+    display: none; 
+    position: relative; 
+    z-index: 1; 
+    left: 0; 
+    top: 0; 
+    width:50vw;  
+    overflow: auto; 
+    background-image: url(/images/bg3.jpg);
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 38px;
+}
+/*define the modal-content background*/ 
+
+.modal-content { 
+    background-color: #fefefe; 
+    margin: 5% auto 15% auto; 
+    border: 1px solid #888; 
+    width: 45%; 
+    background:rgba(0,0,0,0.7);
+    border-radius: 30px
+} 
+
+.close { 
+    position: absolute; 
+    right: 35px; 
+    top: 15px; 
+    color: #fff; 
+    font-size: 40px; 
+    font-weight: bold; 
+} 
+/*define the close hover and focus effects*/ 
+
+.close:hover, 
+.close:focus { 
+    color: red; 
+    cursor: pointer; 
+} 
+
 
 

@@ -16,6 +16,7 @@ userJoinForm.addEventListener('submit', (e) => {
 
     }else {
         userJoinFormButton.setAttribute('disabled', 'disabled')
+        var name = userJoinForm.querySelector('#joinname').value;
         window.location.href="main.html?name=" + name+'?password='+password+'?type=existing';
     }
 
