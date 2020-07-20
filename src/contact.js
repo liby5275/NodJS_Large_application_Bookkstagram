@@ -67,7 +67,31 @@ const removeUser = (userName) => {
     
 }
 
+const isAddedToContact = (userName, profileName) => {
+    var res = false;
+    const contactList = getContactsList();
+
+    const tempList = contactList.filter((user) => {
+        return user.userName === userName
+    })
+
+    if (tempList.length === 0){
+        return res;
+    } else {
+        
+        const contactsAlreadyAdded = tempList[0].contactList;
+        contactsAlreadyAdded.forEach(contact => {
+            if (contact === profileName){
+                res= true;
+            }
+        })
+
+        return res;
+    }
+}
+
 module.exports = {
     addContact: addContact,
-    getContactsList : getContactsList
+    getContactsList : getContactsList,
+    isAddedToContact:isAddedToContact
 }

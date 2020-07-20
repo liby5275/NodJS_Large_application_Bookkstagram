@@ -32,10 +32,17 @@
                         title="Close Modal">×</span>
                         <img id="myImg" src="" width="130" height="130">
                             <div><h1 id="profileName"></h1></div>
+                            <div class="profileOptionIcons" id="profileOptionIcons">
+                                <img id="contactIndicator" src="" width="30" height="30">
+                                <img id="connectionIndicator" src="" width="30" height="30">
+                                <img id="chatIndicator" src="/images/chat.png" width="30" height="30">
+                                <p id="contactIndicatorText"></p>
+                            </div>
                             <p id="favGenre"></p>
                             <p id="favAuthor"></p>
                             <p id="favBook"></p>
                             <p id="lastReadBook"></p>
+                            
                 </div>
             </div>
             <div class="rightContent" id="rightContent">
@@ -74,6 +81,7 @@
     <script type="text/javascript">
         //function to get the paramaters passed to this html through window.location.href
 
+        var userNameLocal='';
         function getParameterByName(name, url) {
             if (!url) url = window.location.href;
             name = name.replace(/[\[\]]/g, '\\$&');
@@ -101,7 +109,7 @@
         }
         this.fetchAndDisplayContactList(userName[0]);
         this.fetchAndStoreCompleteUserList();
-        
+        this.userNameLocal = userName[0]
         //this.saveUserData(userName[0], genre[0], author[0], book[0]);
         //this.addContact(userName[0],'anu')
         //

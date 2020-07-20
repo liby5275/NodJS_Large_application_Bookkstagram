@@ -65,10 +65,16 @@ io.on('connect', (socket) => {
 
     })
 
-    socket.on('getUserDetails', async (profileName) =>{
+    socket.on('getUserDetails', async ({profileName, userName}) =>{
 
-        const userProfileDetails = await userDependency.fetchUser(profileName);
-        socket.emit('profileDetails',userProfileDetails)
+        const userData = await userDependency.fetchUser(profileName);
+        const isAddedToContact = await contactDependency.isAddedToContact(userName,profileName)
+        const isAddedConnection = false;
+        socket.emit('profileDetails',{
+            userData:userData,
+            isAddedToContact:isAddedToContact,
+            isAddedConnection:isAddedConnection
+        })
 
     })
 

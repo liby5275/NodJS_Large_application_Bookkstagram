@@ -6,6 +6,7 @@ const sidebarTemplate = document.querySelector('#contactlistBar-template').inner
 
 var userList='';
 var availableTags = [];
+var isAddedToContact;
 
 socket.on('warning', (message) => {
     alert(message)
@@ -29,7 +30,7 @@ socket.on('contactList', (userData) => {
 
 })
 
-socket.on('profileDetails', (userData) => {
+socket.on('profileDetails', ({userData,isAddedToContact,isAddedConnection}) => {
     if(userData === undefined || userData === null){
         alert('invalid profile')
         document.getElementById('userProfile').style.display="none";
@@ -42,6 +43,12 @@ socket.on('profileDetails', (userData) => {
         document.getElementById('favBook').innerHTML = 'Favourite Book - '+userData.book;
         document.getElementById('lastReadBook').innerHTML = 'Last Book Read - '+userData.lastReadBook;
         document.getElementById("myImg").src = "/images/bg1.jpg";
+        this.isAddedToContact = isAddedToContact;
+        if(isAddedToContact || isAddedToContact === 'true'){
+            document.getElementById("contactIndicator").src = "/images/tick.jpg";
+        } else {
+            document.getElementById("contactIndicator").src = "/images/add.jpg";
+        }
     }
 })
 
@@ -111,7 +118,10 @@ function addClickableActionToContacts() {
 
         buttons[i].addEventListener('click', e => {
             var profileName = buttons[i].innerText;
-            socket.emit('getUserDetails', profileName);
+            socket.emit('getUserDetails',{
+                profileName:profileName,
+                userName:this.userNameLocal
+            });
             
         });
     }
@@ -124,12 +134,30 @@ function addClickableActionToContacts() {
 searchForm.addEventListener('submit', e => {
     e.preventDefault();
     const profileName = e.currentTarget[0].value;
-    socket.emit('getUserDetails', profileName);
+    socket.emit('getUserDetails', {
+        profileName:profileName,
+        userName:this.userNameLocal
+    });
 })
 
 
 $( "#search" ).autocomplete({
     source: availableTags
   });
+
+  const contactIndicator = document.getElementById("contactIndicator")
+  contactIndicator.addEventListener('mouseenter', e=>{
+    document.getElementById('contactIndicatorText').style.display="block"
+    document.getElementById('contactIndicatorText').style.color = "#fff"
+    if(this.isAddedToContact || this.isAddedToContact === true){
+    document.getElementById('contactIndicatorText').innerHTML = "Already in your contacts"
+    } else {
+        document.getElementById('contactIndicatorText').innerHTML = "Add to your contacts"
+    }
+  })
+
+  contactIndicator.addEventListener('mouseleave', e=>{
+    document.getElementById('contactIndicatorText').style.display="none"
+  })
 
 
