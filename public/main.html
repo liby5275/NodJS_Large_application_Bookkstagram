@@ -24,7 +24,13 @@
         <div class="outerContent" id="outerContent">
             
             <div class="leftContent" id="leftContent">
-
+                <div class="myProfile" id="myProfile">
+                    <img id="profilePic" src="" width="130" height="130">
+                    <p id="myProfileName"></p>
+                    <p id="favDetails"></p>
+                    <p id="currentlyReading"></p>
+                    <img id="editIcon" src="/images/Edit.png" width="30" height="30">
+                </div>
             </div>
             <div class="centerContent" id="centerContent">
                 <div id="userProfile" class="modal">
@@ -43,6 +49,12 @@
                             <p id="favBook"></p>
                             <p id="lastReadBook"></p>
                             
+                </div>
+                <div id="bookSearchPanel" class="bookSearchPanel" style="display: none;">
+                    <form class="bookSearchForm" id="bookSearchForm">
+                        <input type="text" placeholder="search your book.." name="bookSearchPanel" id="bookSearchPanel">
+                        <button type="submit" id="bookSearchButton"><i class="fa fa-search"></i></button>
+                    </form>
                 </div>
             </div>
             <div class="rightContent" id="rightContent">
@@ -82,6 +94,7 @@
         //function to get the paramaters passed to this html through window.location.href
 
         var userNameLocal='';
+        var profileNameLocal='';
         function getParameterByName(name, url) {
             if (!url) url = window.location.href;
             name = name.replace(/[\[\]]/g, '\\$&');
@@ -102,14 +115,17 @@
             var book = getParameterByName('book').split('?');
             var lastReadBook = getParameterByName('lastReadBook').split('?')
             console.log('last book '+lastReadBook[0])
-            this.saveUserData(userName[0],password[0], genre[0], author[0], book[0], lastReadBook[0]);
+            var currentlyReading = 'Not updated'
+            this.saveUserData(userName[0],password[0], genre[0], author[0], book[0], lastReadBook[0],currentlyReading);
         }else {
             console.log('existing user with '+userName[0] + password[0])
             this.validateLoginCreds(userName[0],password[0]);
         }
+        this.userNameLocal = userName[0]
         this.fetchAndDisplayContactList(userName[0]);
         this.fetchAndStoreCompleteUserList();
-        this.userNameLocal = userName[0]
+        this.fetchAndDisplaySelfProfile(userName[0])
+        
         //this.saveUserData(userName[0], genre[0], author[0], book[0]);
         //this.addContact(userName[0],'anu')
         //

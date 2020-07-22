@@ -77,6 +77,52 @@ border-top-color: darkgray;
 border-radius: 41px;
 }
 
+.leftContent{
+    background-image: url('/images/search_bg.jpeg');
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width:20vw; 
+    border-right-style: outset;
+    border-top-style: outset;
+    border-right-width: 10px;
+    border-top-width: 10px;
+    border-right-color: #f6f6f6;
+    border-top-color: darkgray;
+    border-radius: 41px;
+}
+
+#profilePic{
+    margin-left: 23%;
+    margin-top: -69px;
+    border-radius: 70px;
+    border-style: solid;
+    border-color: crimson;
+}
+
+#myProfileName{
+    text-align: center;
+    padding-right: 16px;
+    font-size: xx-large;
+    margin-top: 9px;
+    text-transform: capitalize;
+}
+
+#favDetails{
+font-family: fantasy;
+text-align: center;
+margin-top: -14px;
+}
+#currentlyReading{
+text-align: center;
+}
+#editIcon{
+float: right;
+margin-top: -39px;
+margin-right: 6px;
+}
+
 .searchForm{
     margin: 20 0 0 10px;
 }
@@ -111,9 +157,9 @@ border-radius: 41px;
     z-index: 1; 
     left: 0; 
     top: 0; 
-    width:50vw;  
+    width:45vw;  
     overflow: auto; 
-    background-image: url(/images/bg3.jpg);
+    background-image: url(/images/bg4.jpg);
     height: 100%;
     background-position: center;
     background-repeat: no-repeat;
@@ -131,11 +177,12 @@ border-radius: 41px;
     border-right-style: groove;
     border-right-width: 8px;
     border-right-color: #cccccc;
+    margin-left:80px;
 }
 /*define the modal-content background*/ 
 
 .modal-content { 
-    background-color: #fefefe; 
+    background-color:#fefefe; 
     margin: 5% auto 15% auto; 
     border: 1px solid #888; 
     width: 45%; 
@@ -163,7 +210,7 @@ border-radius: 41px;
 #profileName{
     margin-left:30%;
     margin-top:-15%;
-    color: #d3d3e0;
+    color: #000;
 }
 
 #myImg{
@@ -173,13 +220,13 @@ border-radius: 41px;
 
 #favGenre{
     margin-left:30%;
-    color: #d3d3e0;
+    color: #000;
 }
 #favAuthor,
 #favBook,
 #lastReadBook{
     margin-left:30%;
-    color: #d3d3e0;
+    color: #000;
 }
 
 .ui-menu .ui-menu-item-wrapper {
@@ -202,5 +249,25 @@ border-radius: 41px;
 
 #connectionIndicator,
 #chatIndicator {
-    padding-left: 15px;
+    margin-left: 15px;
+}
+
+#contactIndicator,
+#connectionIndicator,
+#chatIndicator {
+    border-radius: 38px;
+}
+#bookSearchPanel{
+    border-top-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    width: 62%;
+    height: 36px;
+    margin-left: 10%;
+}
+
+#bookSearchButton{
+    width: 36px;
+    height: 32px;
+    margin-left: 16px
 }

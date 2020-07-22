@@ -1,9 +1,9 @@
 const fs = require('fs')
 
-const addUser = (id, name, password, genre, author, book, lastReadBook) => {
+const addUser = (id, name, password, genre, author, book, lastReadBook, currentRead) => {
 
     const userList = getUserDataList();
-    const user = { id, name, password, genre, author, book, lastReadBook }
+    const user = { id, name, password, genre, author, book, lastReadBook, currentRead }
     userList.push(user);
     fs.writeFileSync('files/userData.json', JSON.stringify(userList))
 

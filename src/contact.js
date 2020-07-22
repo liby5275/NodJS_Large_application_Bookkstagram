@@ -10,7 +10,7 @@ const addContact = (userName, contact) => {
     })
     
     if(duplicateTitle.length === 0){
-
+    console.log('emty cpntact')
         var contactList = [];
         contactList.push(contact)
         const contactObj = {
@@ -47,7 +47,6 @@ const getContactsList = () =>{
         const contacts = JSON.parse(contactsJson)
         return contacts;
     } catch(e) {
-        console.log('getContactList : no such file present in the system')
         return []
     }
 }

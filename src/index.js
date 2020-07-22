@@ -23,15 +23,15 @@ io.on('connect', (socket) => {
 
     socket.emit('message', 'Welcome to the Chat App')
 
-    socket.on('joined', async ({ name, password, genre, author, book, lastReadBook }, callback) => {
-        console.log('last'+lastReadBook)
+    socket.on('joined', async ({ name, password, genre, author, book, lastReadBook, currentRead }, callback) => {
+        
         const _id = socket.id
         const istaken =  await userDependency.isUsernameAlreadyTaken(name);  
                 if (istaken || istaken === 'true') {
                     socket.emit('warning', 'This username already taken. Take another one')
                 } else {
                     console.log('lastBook'+lastReadBook)
-                    await userDependency.addUser(_id, name, password, genre, author, book, lastReadBook)
+                    await userDependency.addUser(_id, name, password, genre, author, book, lastReadBook, currentRead)
                     socket.emit('joincompleted', name)
                 }
         
@@ -61,13 +61,18 @@ io.on('connect', (socket) => {
 
     socket.on('addContact',async ({userName,contact}) => {
 
+        console.log('adding contct '+userName +contact)
         await contactDependency.addContact(userName,contact);
+        socket.emit('contactAdded', contact)
 
     })
 
     socket.on('getUserDetails', async ({profileName, userName}) =>{
-
         const userData = await userDependency.fetchUser(profileName);
+        if( profileName === userName){
+            socket.emit('SelfProfileDetails', userData);
+        } else {
+            console.log('abt to display')
         const isAddedToContact = await contactDependency.isAddedToContact(userName,profileName)
         const isAddedConnection = false;
         socket.emit('profileDetails',{
@@ -75,6 +80,7 @@ io.on('connect', (socket) => {
             isAddedToContact:isAddedToContact,
             isAddedConnection:isAddedConnection
         })
+    }
 
     })
 
