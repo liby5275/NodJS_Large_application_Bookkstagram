@@ -51,12 +51,11 @@ li a:hover {
     border-radius: 41px;
 }
 .centerContent{
-background-image: url('/images/main.jpg');
+background-image: url('/images/main2.jpg');
 height: 100%;
 background-position: center;
 background-repeat: no-repeat;
 background-size: cover;
-opacity: 0.5;
 width:60vw;
 border-radius: 41px;
 }
@@ -123,7 +122,8 @@ margin-top: -39px;
 margin-right: 6px;
 }
 
-.searchForm{
+.searchForm,
+.bookSearchForm{
     margin: 20 0 0 10px;
 }
 
@@ -158,8 +158,7 @@ margin-right: 6px;
     left: 0; 
     top: 0; 
     width:45vw;  
-    overflow: auto; 
-    background-image: url(/images/bg4.jpg);
+    overflow: auto;
     height: 100%;
     background-position: center;
     background-repeat: no-repeat;
@@ -179,6 +178,11 @@ margin-right: 6px;
     border-right-color: #cccccc;
     margin-left:80px;
 }
+
+#userProfile{
+    background-image: url(/images/bg4.jpg);
+}
+
 /*define the modal-content background*/ 
 
 .modal-content { 
@@ -233,14 +237,31 @@ margin-right: 6px;
     position: relative;
     padding: 3px 1em 3px .4em;
     background-image: url(/images/dark.jpg);
+    height: 25px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     color: #d3d3e0;
-    border-bottom-width: 6px;
-    border-bottom-color: #d3d3e0;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-bottom-color:#fff;
+    border-left-color: #fff;
+    border-right-color:#fff;
+    border-radius: 30px;
     
 }
+
+.ui-menu-item{
+    max-width: 490px;
+    
+    background-color: #f1f1f1;
+}
+
+
 
 .profileOptionIcons{
     margin-left: 22px;
@@ -257,7 +278,7 @@ margin-right: 6px;
 #chatIndicator {
     border-radius: 38px;
 }
-#bookSearchPanel{
+#bookSearchArea{
     border-top-style: none;
     border-left-style: none;
     border-right-style: none;
@@ -271,3 +292,98 @@ margin-right: 6px;
     height: 32px;
     margin-left: 16px
 }
+
+#bookProfile{
+    width: 92%;
+    height: 80%;
+    margin-left: 8%;
+    margin-top: 3%;
+    border-radius: 30px;
+}
+
+#bookImage{
+    margin-left: 3%;
+    margin-top: 6px;
+    border-style: double;
+    border-color: blue;
+}
+
+#bookDetails{
+    width: 73%;
+    overflow-y: scroll;
+}
+
+#bookName{
+    font-size: xx-large;
+    text-transform: capitalize;
+    font-style: italic;
+    margin-left: 22px;
+    margin-top: -5%;
+    text-align: center;
+}
+
+#bookAuthor{
+    text-align: center;
+    margin-bottom: 6%;
+}
+
+#bookType{
+    text-align: center;
+}
+
+#bookIcons{
+    display: flex;
+    justify-content: center;
+}
+
+#genreIcon,
+#ratingIcon,
+#totalPagesIcon{
+    padding-left: 3%;
+    margin-top: 2%;
+}
+
+#genreIconValue,
+#ratingIconValue,
+#totalPagesIconValue{
+    margin-left: 3px;
+}
+
+#bookDescription{
+    margin-left: 3%;
+    margin-right: 3%;
+    text-align: justify;
+    font-style: oblique;
+}
+
+#bookShelf{
+    height: 25px;
+    position: fixed;
+    width: 9%;
+    margin-top: 16%;
+    margin-left: 1.5%;
+    font-family: Arial;
+    border-radius: 20px;
+    background-color: #d3d3e0;
+} 
+#bookShelf:focus {
+	border-color: #aaa;
+	box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+	box-shadow: 0 0 0 3px -moz-mac-focusring;
+	color: #222;
+	outline: none;
+}
+.select-items {
+    position: absolute;
+    background-color: DodgerBlue;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+  }
+
+#goButtonBookShelf{
+    position: fixed;
+    margin-top: 15.8%;
+    margin-left: 11.5%;
+}  

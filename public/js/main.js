@@ -5,11 +5,22 @@ const contactListBarElement = document.querySelector('#contactListBar')
 const contactIndicator = document.getElementById("contactIndicator")
 const chatIndicator = document.getElementById("chatIndicator")
 const editIcon = document.getElementById("editIcon")
+const bookSearchPanel = document.getElementById("bookSearchPanel")
+const goButtonBookShelf = document.getElementById("goButtonBookShelf")
 const sidebarTemplate = document.querySelector('#contactlistBar-template').innerHTML
 
 var userList = '';
 var availableTags = [];
+var bookListLocal = [];
+var bookListWithNameAndAuthor = [];
 var isAddedToContact;
+
+
+/*
+************************************************
+* This section is for socket listeners *********
+************************************************
+*/
 
 socket.on('warning', (message) => {
     alert(message)
@@ -78,6 +89,35 @@ socket.on('contactAdded',contact=>{
     document.getElementById("contactIndicator").src = "/images/tick.jpg";
 })
 
+
+socket.on('bookListPerSearch', bookListData => {
+    for(let i=0; i<bookListData.length || i<5; i++){
+    this.bookListLocal.push(bookListData[i]);
+    }
+    
+    //this.bookListWithNameAndAuthor = []
+    if(bookListData != null && bookListData !=undefined){
+    for(let i=0; i<bookListData.length || i<5; i++){
+        if(bookListData[i].volumeInfo.authors != undefined){
+        this.bookListWithNameAndAuthor.push(bookListData[i].volumeInfo.title+' by '
+        +bookListData[i].volumeInfo.authors[0])}
+        else {
+            this.bookListWithNameAndAuthor.push(bookListData[i].volumeInfo.title)
+        }
+    }
+}
+
+    
+
+})
+
+
+
+
+/***********************************************
+ * This is for functions
+ ***********************************************/
+
 function saveUserData(userNAme, password, genre, author, book, lastReadBook, currentRead) {
 
     socket.emit('joined', {
@@ -101,9 +141,7 @@ function validateLoginCreds(userName, password) {
     })
 }
 
-/*
-function to add a contact to the fiile
-*/
+
 
 function addContact(userName, contact) {
     socket.emit('addContact', {
@@ -151,12 +189,17 @@ function fetchAndStoreCompleteUserList() {
 }
 
 function fetchAndDisplaySelfProfile(userName) {
+    
     socket.emit('getUserDetails', {
         profileName: userName,
         userName: userName
     });
 }
 
+
+/*
+*  search related listeners
+*/
 searchForm.addEventListener('submit', e => {
     e.preventDefault();
     const profileName = e.currentTarget[0].value;
@@ -168,11 +211,51 @@ searchForm.addEventListener('submit', e => {
     });
 })
 
+bookSearchForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const searchedBookName = e.currentTarget[0].value;
+    const valueSplitted = searchedBookName.split(' by ');
+    if(this.bookListLocal.length>0){
+
+        for(let i =0; i<bookListLocal.length; i++){
+            if(bookListLocal[i].volumeInfo.title === valueSplitted[0]) {
+                document.getElementById('bookProfile').style.display='flex';
+                document.getElementById('bookImage').src = bookListLocal[i].volumeInfo.imageLinks.thumbnail;
+                document.getElementById('bookName').innerHTML = valueSplitted[0].substring(0, 35);
+                document.getElementById('bookAuthor').innerHTML = bookListLocal[i].volumeInfo.authors[0]
+                document.getElementById('genreIconValue').innerHTML = bookListLocal[i].volumeInfo.categories[0];
+                document.getElementById('ratingIconValue').innerHTML =  bookListLocal[i].volumeInfo.averageRating +'/5';
+                document.getElementById('totalPagesIconValue').innerHTML =  bookListLocal[i].volumeInfo.pageCount+ ' pages'
+                document.getElementById('bookDescription').innerHTML = bookListLocal[i].volumeInfo.description;
+                break;
+            }
+        }
+
+    } else {
+        alert('no such book found');
+    }
+})
+
+bookSearchPanel.addEventListener('input', e =>{
+    var currentTypedString = e.target.value;
+    
+    if(currentTypedString.length > 2){
+        socket.emit('searchBookWithString', currentTypedString);
+    }
+})
+
 
 $("#search").autocomplete({
     source: availableTags
 });
 
+$("#bookSearchArea").autocomplete({
+    source: bookListWithNameAndAuthor
+});
+     
+/*
+* contact and my profile section
+*/
 
 contactIndicator.addEventListener('mouseenter', e => {
     document.getElementById('contactIndicatorText').style.display = "block"
@@ -210,6 +293,20 @@ chatIndicator.addEventListener('mouseleave', e => {
 
 editIcon.addEventListener('click', e =>{
     document.getElementById('bookSearchPanel').style.display = "block"
+})
+
+/*
+* book suggestion section
+*/
+goButtonBookShelf.addEventListener('click', e => {
+    var selected = document.getElementById('bookShelf').value;
+    var bookName = document.getElementById('bookName').innerHTML
+    if( selected === 'Not Read'){
+        alert('please select a book shelf other that (not read)')
+    } else {
+        socket.emit('updateBookShelf', selected,this.userNameLocal,bookName)
+        alert('Book shelf updated!')
+    }
 })
 
 

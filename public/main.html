@@ -50,11 +50,39 @@
                             <p id="lastReadBook"></p>
                             
                 </div>
+
+                
                 <div id="bookSearchPanel" class="bookSearchPanel" style="display: none;">
                     <form class="bookSearchForm" id="bookSearchForm">
-                        <input type="text" placeholder="search your book.." name="bookSearchPanel" id="bookSearchPanel">
+                        <input type="text" placeholder="search with book or author name.." name="bookSearchArea" id="bookSearchArea">
                         <button type="submit" id="bookSearchButton"><i class="fa fa-search"></i></button>
                     </form>
+                </div>
+
+                <div id="bookProfile"  style="display: none;">
+                            <img id="bookImage" src="" width="160" height="180">
+
+                            <select name="bookShelf" class="custom-select" id="bookShelf">
+                            <option value="Not Read">Haven't read</option>
+                            <option value="Next Reads">Next Reads</option>
+                            <option value="Finsished Reading">Finished Reading</option>
+                            <option value="Current Read">Current Read</option>
+                            </select>
+                            <img id="goButtonBookShelf" src="/images/Go.jpg" width="30" height="30">
+                            <div class="bookDetails" id ="bookDetails">
+                            <p id="bookAuthor"></p>
+                            <h1 id="bookName"></h1>
+                            <div class = "bookIcons" id ="bookIcons">
+                                <img id="genreIcon" src="/images/genre.jpg" width="30" height="30">
+                                <p id="genreIconValue"></p>
+                                <img id="ratingIcon" src="/images/rating.png" width="30" height="30">
+                                <p id="ratingIconValue"></p>
+                                <img id="totalPagesIcon" src="/images/pagesTotal.png" width="30" height="30">
+                                <p id="totalPagesIconValue"></p>
+                            </div>
+                            <p id="bookDescription"></p>
+                        </div>
+                            
                 </div>
             </div>
             <div class="rightContent" id="rightContent">

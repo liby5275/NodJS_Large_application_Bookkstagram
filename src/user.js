@@ -9,6 +9,19 @@ const addUser = (id, name, password, genre, author, book, lastReadBook, currentR
 
 }
 
+const updateCurrentBook = (userName, bookName) => {
+    var user = fetchUser(userName);
+    removeUser(userName);
+    var id = user.id; var password= user.password; var genre= user.genre;var author=user.author;
+    var name = user.name; var book = user.book; var lastReadBook= user.lastReadBook
+    var currentRead=bookName;
+
+    const updatedUser = { id, name, password, genre, author, book, lastReadBook, currentRead }
+    const userList = getUserDataList();
+    userList.push(updatedUser);
+    fs.writeFileSync('files/userData.json', JSON.stringify(userList))
+}
+
 
 const getUserDataList = () =>{
     try{
@@ -48,12 +61,13 @@ const isUsernameAlreadyTaken = async (name) => {
     return res; 
 }
 
-const removeUser = (id) => {
-
+const removeUser = (name) => {
+    var userList = getUserDataList();
     const tempUserList = userList.filter((user) => {
-        return id != user.id
+        return name != user.name
     })
     userList = tempUserList
+    fs.writeFileSync('files/userData.json', JSON.stringify(userList))
 }
 
 const fetchUser = function(name) {
@@ -101,6 +115,7 @@ const getUsersInaRoom = function (room){
 module.exports = {
     isUsernameAlreadyTaken: isUsernameAlreadyTaken,
     addUser: addUser,
+    updateCurrentBook:updateCurrentBook,
     validateUserCreds:validateUserCreds,
     removeUser:removeUser,
     fetchUser:fetchUser,

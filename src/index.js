@@ -5,6 +5,7 @@ const socket = require('socket.io')
 const userDependency = require('./user')
 const roomDependency = require('./room')
 const contactDependency = require('./contact')
+const booksDependency = require('./books')
 
 
 
@@ -87,6 +88,22 @@ io.on('connect', (socket) => {
     socket.on('fetchCompleteUserList', async () => {
         const userList = await userDependency.getUserDataList();
         socket.emit('completeUserList', userList)
+    })
+
+    socket.on('searchBookWithString', currentTypedString => {
+
+        booksDependency.getBooksForSearchedString(currentTypedString, (callbackError, callbackdata) => {
+            
+            socket.emit('bookListPerSearch', callbackdata)
+            
+        })
+
+    })
+
+    socket.on('updateBookShelf',async (selected,userName, bookName) => {
+        if(selected === 'Current Read'){
+            await userDependency.updateCurrentBook(userName,bookName)
+        }
     })
 
     socket.on('location', (coords, callback) => {
