@@ -387,3 +387,17 @@ margin-right: 6px;
     margin-top: 15.8%;
     margin-left: 11.5%;
 }  
+
+/* #currentlyReadingDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+.currentlyReadingDiv {
+    
+}
+
+.currentlyReadingChild{
+    
+}

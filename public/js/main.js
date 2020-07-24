@@ -71,7 +71,7 @@ socket.on('profileDetails', ({ userData, isAddedToContact, isAddedConnection }) 
 socket.on('SelfProfileDetails', userData => {
     document.getElementById("profilePic").src = "/images/bg1.jpg";
     document.getElementById('myProfileName').innerHTML = userData.name;
-    document.getElementById('currentlyReading').innerHTML = 'Current Read - '+userData.currentRead;
+    document.getElementById('currentlyReading').innerHTML = 'CR: '+userData.currentRead.substring(0, 35);
     document.getElementById('favDetails').innerHTML = userData.genre + ' '+'lover'+' || ' +userData.author + ' fan';
 })
 

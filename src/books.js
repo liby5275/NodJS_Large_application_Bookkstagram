@@ -4,7 +4,7 @@ const request = require('request')
 
 const getBooksForSearchedString = (urlSearchString, callback) => {
 
-    var url = 'https://www.googleapis.com/books/v1/volumes?q='+urlSearchString
+    var url = 'https://www.googleapis.com/books/v1/volumes?q='+urlSearchString+'&maxResults=6'
     
 
     request({ url: url, json: true }, (error, response) => {
