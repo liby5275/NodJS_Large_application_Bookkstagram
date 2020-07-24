@@ -401,3 +401,99 @@ margin-right: 6px;
 .currentlyReadingChild{
     
 }
+
+
+.search-box {
+    border-top-style: none;
+    border-left-style: none;
+    border-right-style: none;
+    width: 67%;
+    height: 40px;
+    margin-left: 10%;
+    margin-top: 2%;
+  }
+
+  .search,
+.prev {
+  display: none;
+}
+  .results {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .prompt {
+    display: flex;
+    padding: 16px;
+    color: var(--secondary-color);
+    transition: all 0.2s;
+  }
+  .list-book {
+    display: flex;
+    padding: 32px 16px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  .book {
+    display: flex;
+    margin: 16px;
+    padding: 32px;
+    border-radius: 32px;
+    flex: 1;
+    
+  }
+
+  .book-info {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .thumbnail {
+    margin-right: 32px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s;
+    transform: translate(0, -64px);
+    animation: zoomin 0.5s;
+    cursor: pointer;
+  }
+  
+  .thumbnail:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+    transform: translate(0, -64px) scale(1.1);
+  }
+
+  .book-title {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0;
+    text-overflow: ellipsis;
+    font-weight: 900;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    cursor: pointer;
+  }
+  
+  .book-authors {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 16px 0;
+    color: var(--secondary-color);
+    text-overflow: ellipsis;
+    cursor: pointer;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .info {
+    display: inline-flex;
+    padding: 8px 16px;
+    border-radius: 32px;
+    color: var(--secondary-color);
+    text-align: center;
+    font-weight: 600;
+    font-size: 12px;
+  }

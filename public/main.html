@@ -28,12 +28,9 @@
                     <img id="profilePic" src="" width="130" height="130">
                     <p id="myProfileName"></p>
                     <p id="favDetails"></p>
-
-                    
-
                 </div>
                 <div class="currentlyReadingDiv" id="currentlyReadingDiv">
-                        <p id="currentlyReading"></p>
+                    <p id="currentlyReading"></p>
                 </div>
                 <div class="currentlyReadingChild">
                     <img id="editIcon" src="/images/Edit.png" width="30" height="30">
@@ -49,7 +46,7 @@
                     </div>
                     <div class="profileOptionIcons" id="profileOptionIcons">
                         <img id="contactIndicator" src="" width="30" height="30">
-                        <img id="connectionIndicator" src="" width="30" height="30">
+                        <img id="connectionIndicator" src="/images/connect.png" width="30" height="30">
                         <img id="chatIndicator" src="/images/chat.png" width="30" height="30">
                         <p id="contactIndicatorText"></p>
                     </div>
@@ -57,21 +54,17 @@
                     <p id="favAuthor"></p>
                     <p id="favBook"></p>
                     <p id="lastReadBook"></p>
-
                 </div>
-
-
-                <div id="bookSearchPanel" class="bookSearchPanel" style="display: none;">
-                    <form class="bookSearchForm" id="bookSearchForm">
-                        <input type="text" placeholder="search with book or author name.." name="bookSearchArea"
-                            id="bookSearchArea">
-                        <button type="submit" id="bookSearchButton"><i class="fa fa-search"></i></button>
-                    </form>
-                </div>
+                <section id="search" class="results">
+                    <input id="search-box" class="search-box"
+                        placeholder="Search books by name, author, genre and etc ..." aria-label="Search books" />
+                    <div class="list-book search" id="bookListSuggestion">
+                        <div class="prompt" id="prompt"></div>
+                    </div>
+                </section>
 
                 <div id="bookProfile" style="display: none;">
                     <img id="bookImage" src="" width="160" height="180">
-
                     <select name="bookShelf" class="custom-select" id="bookShelf">
                         <option value="Not Read">Haven't read</option>
                         <option value="Next Reads">Next Reads</option>
@@ -92,21 +85,17 @@
                         </div>
                         <p id="bookDescription"></p>
                     </div>
-
                 </div>
             </div>
             <div class="rightContent" id="rightContent">
                 <form class="searchForm" id="searchForm">
-                    <input type="text" placeholder="Find your friend.." name="search" id="search">
+                    <input type="text" placeholder="Find your friend.." name="searchFriend" id="searchFriend">
                     <button type="submit" id="searchButton"><i class="fa fa-search"></i></button>
                 </form>
                 <div class="contactListBar" id="contactListBar">
-
                 </div>
             </div>
         </div>
-
-
     </div>
 
     <script id="contactlistBar-template" type="text/html">

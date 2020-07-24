@@ -6,6 +6,8 @@ const userDependency = require('./user')
 const roomDependency = require('./room')
 const contactDependency = require('./contact')
 const booksDependency = require('./books')
+const connectionDependency = require('./connect')
+const { profileEnd } = require('console')
 
 
 
@@ -25,7 +27,7 @@ io.on('connect', (socket) => {
     socket.emit('message', 'Welcome to the Chat App')
 
     socket.on('joined', async ({ name, password, genre, author, book, lastReadBook, currentRead }, callback) => {
-        
+        socket.join(name)
         const _id = socket.id
         const istaken =  await userDependency.isUsernameAlreadyTaken(name);  
                 if (istaken || istaken === 'true') {
@@ -69,13 +71,18 @@ io.on('connect', (socket) => {
     })
 
     socket.on('getUserDetails', async ({profileName, userName}) =>{
+        this.username = userName;
+        setTimeout(async ()=>{
+            await userDependency.addToOnlineList(userName)
+        },7000)
+        
         const userData = await userDependency.fetchUser(profileName);
         if( profileName === userName){
             socket.emit('SelfProfileDetails', userData);
         } else {
             console.log('abt to display')
         const isAddedToContact = await contactDependency.isAddedToContact(userName,profileName)
-        const isAddedConnection = false;
+        const isAddedConnection = await connectionDependency.isAddedToconnection(userName,profileName)
         socket.emit('profileDetails',{
             userData:userData,
             isAddedToContact:isAddedToContact,
@@ -106,6 +113,14 @@ io.on('connect', (socket) => {
         }
     })
 
+    socket.on('addConnection', async(userName,profileName) => {
+        await connectionDependency.addConnection(userName,profileName)
+        socket.emit('connectionAdded',profileName)
+        socket.join(profileName)
+        socket.broadcast.to(profileName).emit('dummy')
+        
+    })
+
     socket.on('location', (coords, callback) => {
         socket.join(userroom)
         io.to(userroom).emit('coords', coords.latitude, coords.longitude, username)
@@ -132,7 +147,12 @@ io.on('connect', (socket) => {
         io.to(userroom).emit('unlockedthegroup')
     })  
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
+        setTimeout(async()=>{
+            console.log('disconnecting '+this.username)
+        await userDependency.deleteFromOnlineList(this.username)
+        }, 5000)
+        
         /* const _id = socket.id
         //console.log('disconnecting id is ' + username)
         userDependency.removeUser(_id)

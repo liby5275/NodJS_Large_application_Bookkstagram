@@ -82,6 +82,32 @@ const fetchUser = function(name) {
     return resultUser
 }
 
+const addToOnlineList = (name) => {
+    var onlineUsers = getOnlineUsers();
+    onlineUsers.push(name)    
+    fs.writeFileSync('files/onlineUsers.json', JSON.stringify(onlineUsers))
+}
+
+const deleteFromOnlineList = (name) => {
+    var onlineUsers = getOnlineUsers();
+    const tempUserList = onlineUsers.filter((user) => {
+        return name != user
+    })   
+    fs.writeFileSync('files/onlineUsers.json', JSON.stringify(tempUserList))
+}
+
+const getOnlineUsers = () => {
+    try{
+        const itemsBuffer = fs.readFileSync('files/onlineUsers.json')
+        const itemsJson = itemsBuffer.toString()
+        const users = JSON.parse(itemsJson)
+        return users;
+    } catch(e) {
+        console.log('getContactList : no such file present in the system')
+        return []
+    }
+}
+
 
 
 
@@ -119,5 +145,7 @@ module.exports = {
     validateUserCreds:validateUserCreds,
     removeUser:removeUser,
     fetchUser:fetchUser,
-    getUserDataList:getUserDataList
+    getUserDataList:getUserDataList,
+    addToOnlineList:addToOnlineList,
+    deleteFromOnlineList:deleteFromOnlineList
 }
