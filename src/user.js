@@ -30,7 +30,7 @@ const getUserDataList = () =>{
         const users = JSON.parse(itemsJson)
         return users;
     } catch(e) {
-        console.log('getContactList : no such file present in the system')
+        
         return []
     }
 }
@@ -53,7 +53,7 @@ const isUsernameAlreadyTaken = async (name) => {
     const userList = getUserDataList();
     userList.forEach(user=>{
         if(user.name === name ){
-            console.log('taken');
+            
             res = true;
         }
     })
@@ -82,18 +82,26 @@ const fetchUser = function(name) {
     return resultUser
 }
 
-const addToOnlineList = (name) => {
+const addToOnlineList = async (name) => {
+    let isAlreadyOnline = await ifUserIsOnline(name);
+    if(isAlreadyOnline || isAlreadyOnline === true){
+
+    }else {
     var onlineUsers = getOnlineUsers();
-    onlineUsers.push(name)    
+    onlineUsers.push(name)  
     fs.writeFileSync('files/onlineUsers.json', JSON.stringify(onlineUsers))
+    }
 }
 
-const deleteFromOnlineList = (name) => {
+const deleteFromOnlineList = (id) => {
     var onlineUsers = getOnlineUsers();
+    
     const tempUserList = onlineUsers.filter((user) => {
-        return name != user
-    })   
-    fs.writeFileSync('files/onlineUsers.json', JSON.stringify(tempUserList))
+        var splittedValue = user.split('bibinSekcretKey::')
+        return id != splittedValue[0]
+    }) 
+    onlineUsers=tempUserList
+    fs.writeFileSync('files/onlineUsers.json', JSON.stringify(onlineUsers))
 }
 
 const getOnlineUsers = () => {
@@ -103,9 +111,24 @@ const getOnlineUsers = () => {
         const users = JSON.parse(itemsJson)
         return users;
     } catch(e) {
-        console.log('getContactList : no such file present in the system')
+        
         return []
     }
+}
+
+const ifUserIsOnline = (name) => {
+    console.log('incoming request to check whether the user is online '+name)
+    let res = false;
+    var onlineUsers = getOnlineUsers();
+    onlineUsers.forEach(user => {
+        
+        var splitValue = user.split('bibinSekcretKey::')
+        if(name === splitValue[1]){
+            
+            res = true;
+        }
+    })
+    return res;
 }
 
 
@@ -147,5 +170,6 @@ module.exports = {
     fetchUser:fetchUser,
     getUserDataList:getUserDataList,
     addToOnlineList:addToOnlineList,
-    deleteFromOnlineList:deleteFromOnlineList
+    deleteFromOnlineList:deleteFromOnlineList,
+    ifUserIsOnline:ifUserIsOnline
 }

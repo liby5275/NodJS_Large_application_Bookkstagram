@@ -1,9 +1,13 @@
 .container{
     background-color:#e4e5e6;
 }
+body{
+    background-image: url(/images/main2.jpg);
+}
 
 .dummy{
-    height: 60px;
+    height: 40px;
+    background-image: url(/images/main2.jpg);
 }
 
 .navigation{
@@ -39,10 +43,10 @@ li a:hover {
 .outerContent{
     display: flex;
     width: 99vw;
-    height: 70vh;
+    height: 76vh;
     display: flex;
     justify-content: center;
-    margin-top: 35px;
+    margin-top: 23px;
 
 }
 
@@ -149,6 +153,31 @@ margin-right: 6px;
     font-size: large;
     margin-bottom: 10px;
     padding: 16px;
+}
+
+.notifcs{
+    padding-left: 10px;
+}
+
+.notifcs li{
+    background-image: url(/images/dark.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 10px;
+    list-style-type: none;
+    color: #d3d3e0;
+    font-variant-caps: all-small-caps;
+    font-size: large;
+    margin-bottom: 10px;
+    padding: 16px;
+}
+
+.notifcsListBar{
+    position: absolute;
+    margin-right: 1%;
+    width: 19%;
+    margin-left: -18%;
 }
 
 .modal { 
@@ -497,3 +526,30 @@ margin-right: 6px;
     font-weight: 600;
     font-size: 12px;
   }
+
+  .notification{
+    float: right;
+    margin-right: 3%;
+    margin-top: -2%;
+    width:10%
+  }
+
+  #messageIcon{
+    margin-left: 9%;
+    border-radius: 30px;
+  }
+  #notificationIcon{
+    border-radius: 30px;
+  }
+  #notificationNumber{
+    margin-top: -34%;
+    /* margin-right: 6%; */
+    margin-left: -6%;
+    color: white;
+    background-color: red;
+    border-radius: 34px;
+    width: 15px;
+    height: 20px;
+
+  }
+  

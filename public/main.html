@@ -10,6 +10,15 @@
         <div class="dummy" id="dummy">
 
         </div>
+        <div class="notification" id ="notification">
+            
+            <img id="notificationIcon" src="/images/notification.jpg" width="30" height="30">
+            <img id="messageIcon" src="/images/message.png" width="30" height="30">
+            <p id="notificationNumber" style="display: none;"></p>
+            <div class="notifcsListBar" id="notifcsListBar"></div>
+        </div>
+        
+        </div>
         <div class="navigation" id="navigation">
             <ul class="navBar" id="navBar">
                 <li><a href="#">Home</a></li>
@@ -20,6 +29,8 @@
                 <li><a href="#">Logout</a></li>
             </ul>
         </div>
+
+        
 
         <div class="outerContent" id="outerContent">
 
@@ -105,6 +116,12 @@
                 <li class="contactItem">{{.}}</li>  
           {{/contactList}}
         </ul> </script>
+        <script id="notifcslistBar-template" type="text/html">
+            <ul class="notifcs" id="notifcs">
+                {{#notificationListLocal}}
+                    <li class="notifcItem">{{.}}</li>  
+              {{/notificationListLocal}}
+            </ul> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
@@ -152,6 +169,7 @@
         this.fetchAndDisplayContactList(userName[0]);
         this.fetchAndStoreCompleteUserList();
         this.fetchAndDisplaySelfProfile(userName[0])
+        this.addOnlineUser(userName[0]);
 
         //this.saveUserData(userName[0], genre[0], author[0], book[0]);
         //this.addContact(userName[0],'anu')

@@ -2,18 +2,24 @@ const socket = io()
 const search = document.querySelector('#search');
 const searchForm = document.querySelector('#searchForm');
 const contactListBarElement = document.querySelector('#contactListBar')
+const notificsListBarElement = document.querySelector("#notifcsListBar")
 const contactIndicator = document.getElementById("contactIndicator")
 const chatIndicator = document.getElementById("chatIndicator")
 const connectionIndicator = document.getElementById("connectionIndicator")
 const editIcon = document.getElementById("editIcon")
 const bookSearchPanel = document.getElementById("bookSearchPanel")
 const goButtonBookShelf = document.getElementById("goButtonBookShelf")
+const notificationNumber = document.getElementById("notificationNumber")
+const notificationIcon = document.getElementById('notificationIcon')
 const sidebarTemplate = document.querySelector('#contactlistBar-template').innerHTML
+const notifcslistBartemplate = document.querySelector('#notifcslistBar-template').innerHTML
+
 
 var userList = '';
 var availableTags = [];
 var bookListLocal = [];
 var bookListWithNameAndAuthor = [];
+var notificationListLocal = []
 var isAddedToContact;
 var isAddedAsConnection;
 
@@ -120,8 +126,12 @@ socket.on('connectionAdded', profileName => {
     alert(profileName+' has been added as your connection')
 })
 
-socket.on('dummy',()=>{
-    console.log('hello there')
+socket.on('notifyTheUser',userName=>{
+    console.log('hello world')
+    var currentNumber= notificationNumber.innerHTML
+    notificationNumber.innerHTML =  Number(currentNumber) +1
+    notificationNumber.style.display="block"
+    notificationListLocal.push(userName + ' is now connected to you. Click to view more')
 })
 
 
@@ -269,6 +279,10 @@ const drawListBook = async () => {
     }
 };
 
+function addOnlineUser(userName) {
+    socket.emit('addUserToOnline',userName);
+}
+
 const debounce = (fn, time, to = 0) => {
     to ? clearTimeout(to) : (to = setTimeout(drawListBook, time));
 };
@@ -376,9 +390,14 @@ goButtonBookShelf.addEventListener('click', e => {
     }
 })
 
+notificationIcon.addEventListener('click', e => {
+    
+    const html = Mustache.render(notifcslistBartemplate, {
+        notificationListLocal
+    })
+    notificsListBarElement.innerHTML = html
 
-
-
+})
 
 
 /***************************************************************

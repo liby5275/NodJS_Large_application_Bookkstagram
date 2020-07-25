@@ -63,24 +63,22 @@ io.on('connect', (socket) => {
 
 
     socket.on('addContact',async ({userName,contact}) => {
-
-        console.log('adding contct '+userName +contact)
         await contactDependency.addContact(userName,contact);
         socket.emit('contactAdded', contact)
 
     })
 
     socket.on('getUserDetails', async ({profileName, userName}) =>{
-        this.username = userName;
-        setTimeout(async ()=>{
-            await userDependency.addToOnlineList(userName)
-        },7000)
+        if( profileName === userName){
+            socket.join(userName)
+        } 
         
+        this.username = userName;
         const userData = await userDependency.fetchUser(profileName);
         if( profileName === userName){
             socket.emit('SelfProfileDetails', userData);
         } else {
-            console.log('abt to display')
+            
         const isAddedToContact = await contactDependency.isAddedToContact(userName,profileName)
         const isAddedConnection = await connectionDependency.isAddedToconnection(userName,profileName)
         socket.emit('profileDetails',{
@@ -90,6 +88,13 @@ io.on('connect', (socket) => {
         })
     }
 
+    })
+
+    socket.on('addUserToOnline',async (userName) =>{
+        var key="bibinSekcretKey::";
+        var _id = socket.id;
+        var finalID = _id+key+userName;
+        await userDependency.addToOnlineList(finalID);
     })
 
     socket.on('fetchCompleteUserList', async () => {
@@ -116,8 +121,14 @@ io.on('connect', (socket) => {
     socket.on('addConnection', async(userName,profileName) => {
         await connectionDependency.addConnection(userName,profileName)
         socket.emit('connectionAdded',profileName)
+        let isUserOnline = await userDependency.ifUserIsOnline(profileName);
+        if(isUserOnline || isUserOnline === true){
+        console.log('user is online')
         socket.join(profileName)
-        socket.broadcast.to(profileName).emit('dummy')
+        socket.broadcast.to(profileName).emit('notifyTheUser',userName)
+        }else {
+        
+        }
         
     })
 
@@ -148,10 +159,8 @@ io.on('connect', (socket) => {
     })  
 
     socket.on('disconnect', async () => {
-        setTimeout(async()=>{
-            console.log('disconnecting '+this.username)
-        await userDependency.deleteFromOnlineList(this.username)
-        }, 5000)
+        var _id = socket.id;
+        await userDependency.deleteFromOnlineList(_id)
         
         /* const _id = socket.id
         //console.log('disconnecting id is ' + username)

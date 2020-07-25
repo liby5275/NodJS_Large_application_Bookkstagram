@@ -10,7 +10,7 @@ const addContact = (userName, contact) => {
     })
     
     if(duplicateTitle.length === 0){
-    console.log('emty cpntact')
+    
         var contactList = [];
         contactList.push(contact)
         const contactObj = {
@@ -25,7 +25,7 @@ const addContact = (userName, contact) => {
         
         removeUser(userName);
         contactsNew = getContactsList();
-        console.log('bla'+contactsNew);
+        
         duplicateTitle[0].contactList.push(contact)
         const contactObj = {
             'userName':userName,
