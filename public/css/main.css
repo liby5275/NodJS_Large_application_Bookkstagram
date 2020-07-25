@@ -163,14 +163,22 @@ margin-right: 6px;
     background-image: url(/images/dark.jpg);
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    /* background-size: cover; */
     height: 10px;
     list-style-type: none;
     color: #d3d3e0;
-    font-variant-caps: all-small-caps;
-    font-size: large;
-    margin-bottom: 10px;
-    padding: 16px;
+    /* font-variant-caps: titling-caps; */
+    font-size: smaller;
+    padding: 15px;
+    text-align: center;
+}
+
+.notifcs li.notifcItem{
+color: #000;
+height: fit-content;
+}
+.notifcItem{
+color: #000;
 }
 
 .notifcsListBar{

@@ -126,6 +126,7 @@ io.on('connect', (socket) => {
         console.log('user is online')
         socket.join(profileName)
         socket.broadcast.to(profileName).emit('notifyTheUser',userName)
+        socket.leave(profileName)
         }else {
         
         }

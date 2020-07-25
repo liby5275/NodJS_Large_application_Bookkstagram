@@ -22,6 +22,7 @@ var bookListWithNameAndAuthor = [];
 var notificationListLocal = []
 var isAddedToContact;
 var isAddedAsConnection;
+var toggleNotification = true;
 
 
 /*
@@ -391,11 +392,18 @@ goButtonBookShelf.addEventListener('click', e => {
 })
 
 notificationIcon.addEventListener('click', e => {
-    
+    if(toggleNotification || toggleNotification === true){
+        notificationListLocal.push('skdfbsdkfjbsdfbsdkjfbsdkfjbsdfkjb')
     const html = Mustache.render(notifcslistBartemplate, {
         notificationListLocal
     })
     notificsListBarElement.innerHTML = html
+    toggleNotification = false;
+    } else {
+        notificsListBarElement.innerHTML = ''
+        toggleNotification = true;
+    }
+
 
 })
 
