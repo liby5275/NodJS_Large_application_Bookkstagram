@@ -156,11 +156,19 @@ margin-right: 6px;
 }
 
 .notifcs{
-    padding-left: 10px;
+    margin-top: 0%;
+    margin-bottom: 0%;
 }
 
 .notifcs li{
     background-image: url(/images/dark.jpg);
+    background: -webkit-linear-gradient(110deg, #fdcd3b 60%, #ffed4b 60%);
+  background: -o-linear-gradient(110deg, #fdcd3b 60%, #ffed4b 60%);
+  background: -moz-linear-gradient(110deg, #fdcd3b 60%, #ffed4b 60%);
+  background: linear-gradient(110deg, #fdcd3b 60%, #ffed4b 60%);
+  background-image: url(/images/brown1.jpg);
+    border-style: groove;
+
     background-position: center;
     background-repeat: no-repeat;
     /* background-size: cover; */
@@ -184,8 +192,8 @@ color: #000;
 .notifcsListBar{
     position: absolute;
     margin-right: 1%;
-    width: 19%;
-    margin-left: -18%;
+    width: 24%;
+    margin-left: -23%;
 }
 
 .modal { 
@@ -425,19 +433,7 @@ color: #000;
     margin-left: 11.5%;
 }  
 
-/* #currentlyReadingDiv{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-} */
 
-.currentlyReadingDiv {
-    
-}
-
-.currentlyReadingChild{
-    
-}
 
 
 .search-box {
@@ -466,12 +462,22 @@ color: #000;
     color: var(--secondary-color);
     transition: all 0.2s;
   }
-  .list-book {
+  
+  .list-book,
+  .bookSuggestionList {
     display: flex;
     padding: 32px 16px;
     width: 100%;
     flex-wrap: wrap;
   }
+
+  .activitiesList{
+    
+    padding: 32px 16px;
+    width: 93%;
+    flex-wrap: wrap;
+  }
+
   
   .book {
     display: flex;
@@ -479,7 +485,38 @@ color: #000;
     padding: 32px;
     border-radius: 32px;
     flex: 1;
+    border-style: inset;
+  }
+
+  .activityBlock{
+    display: flex;
+    margin: 16px;
+    padding: 32px;
+    border-radius: 32px;
+    flex: 1;
     
+  }
+
+  #activityHeader{
+    font-family: cursive;
+    font-size: large;
+  }
+
+  .activityImage{
+    margin-top: 10%;
+  margin-left: 18%;
+  border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s;
+    transform: translate(0, -64px);
+    animation: zoomin 0.5s;
+    cursor: pointer;
+    border-style: groove;
+  }
+  
+  .activityImage:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+    transform: translate(0, -64px) scale(1.1);
   }
 
   .book-info {
@@ -496,6 +533,7 @@ color: #000;
     transform: translate(0, -64px);
     animation: zoomin 0.5s;
     cursor: pointer;
+    border-style: groove;
   }
   
   .thumbnail:hover {
@@ -554,10 +592,24 @@ color: #000;
     /* margin-right: 6%; */
     margin-left: -6%;
     color: white;
-    background-color: red;
+    background-color:#fd7f3bd4;
     border-radius: 34px;
     width: 15px;
     height: 20px;
 
   }
+  #suggestionWaitMessage{
+      padding-left:10%;
+      text-align: center;
+      font-size: large;
+      color: blue;
+  }
   
+  #bookSuggestionRefresh{
+    float: right;
+    margin-right: 4%;
+  }
+
+  #refreshIcon{
+    border-radius: 38px;
+  }

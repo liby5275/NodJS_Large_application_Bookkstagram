@@ -117,7 +117,7 @@ const getOnlineUsers = () => {
 }
 
 const ifUserIsOnline = (name) => {
-    console.log('incoming request to check whether the user is online '+name)
+   
     let res = false;
     var onlineUsers = getOnlineUsers();
     onlineUsers.forEach(user => {

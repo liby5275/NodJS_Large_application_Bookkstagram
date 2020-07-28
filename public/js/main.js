@@ -11,6 +11,10 @@ const bookSearchPanel = document.getElementById("bookSearchPanel")
 const goButtonBookShelf = document.getElementById("goButtonBookShelf")
 const notificationNumber = document.getElementById("notificationNumber")
 const notificationIcon = document.getElementById('notificationIcon')
+const bookSuggestionList = document.getElementById('bookSuggestionList')
+const bookSuggestionRefresh = document.getElementById('bookSuggestionRefresh')
+const refreshIcon = document.getElementById('refreshIcon')
+const activitiesList = document.getElementById('activitiesList')
 const sidebarTemplate = document.querySelector('#contactlistBar-template').innerHTML
 const notifcslistBartemplate = document.querySelector('#notifcslistBar-template').innerHTML
 
@@ -23,6 +27,9 @@ var notificationListLocal = []
 var isAddedToContact;
 var isAddedAsConnection;
 var toggleNotification = true;
+var favAuthorOfThisUser = '';
+var favGenreOfThisUSer = '';
+var lastReadBookByThisUser = '';
 
 
 /*
@@ -74,6 +81,8 @@ socket.on('profileDetails', ({ userData, isAddedToContact, isAddedConnection }) 
             document.getElementById("contactIndicator").src = "/images/add.jpg";
         }
         document.getElementById('userProfile').style.display = "block";
+
+
     }
 
 })
@@ -83,6 +92,9 @@ socket.on('SelfProfileDetails', userData => {
     document.getElementById('myProfileName').innerHTML = userData.name;
     document.getElementById('currentlyReading').innerHTML = 'CR: ' + userData.currentRead.substring(0, 35);
     document.getElementById('favDetails').innerHTML = userData.genre + ' ' + 'lover' + ' || ' + userData.author + ' fan';
+    this.favAuthorOfThisUser = userData.author;
+    this.favGenreOfThisUSer = userData.genre;
+    this.lastReadBookByThisUser = userData.lastReadBook;
 })
 
 socket.on('completeUserList', userListData => {
@@ -124,17 +136,68 @@ socket.on('bookListPerSearch', bookListData => {
 
 socket.on('connectionAdded', profileName => {
     this.isAddedAsConnection = true;
-    alert(profileName+' has been added as your connection')
+    alert(profileName + ' has been added as your connection')
 })
 
-socket.on('notifyTheUser',userName=>{
-    console.log('hello world')
-    var currentNumber= notificationNumber.innerHTML
-    notificationNumber.innerHTML =  Number(currentNumber) +1
-    notificationNumber.style.display="block"
+socket.on('notifyTheUser', (userName,profileName) => {
+    if(profileName === this.userNameLocal){
+    var currentNumber = notificationNumber.innerHTML
+    notificationNumber.innerHTML = Number(currentNumber) + 1
+    notificationNumber.style.display = "block"
     notificationListLocal.push(userName + ' is now connected to you. Click to view more')
+    }
 })
 
+socket.on('getNotifcsResponse', notifcsForCurrentUser => {
+
+    var anyNewNotifcs = false;
+    let count =0;
+    notifcsForCurrentUser[0].notificList.forEach(item => {
+        if(item.state === "new"){
+            anyNewNotifcs = true;
+            count =count+1;
+            
+        }
+        notificationListLocal.push(item.fromId + ' is now connected to you. Click to view more')
+    })
+
+    if(anyNewNotifcs || anyNewNotifcs === 'true'){
+        var currentNumber = notificationNumber.innerHTML
+        notificationNumber.innerHTML = Number(currentNumber) + count;
+        notificationNumber.style.display = "block"
+    }
+})
+
+socket.on('activites',async activitesTotal => {
+    console.log('hello')
+    
+    document.getElementById('bookListSuggestion').style.display="none"
+    bookSuggestionList.style.display = "none";
+    activitiesList.innerHTML = `<div class='prompt'><div class="loader"></div></div>`;
+
+    await activitesTotal.forEach(async activity => {
+        if(activity.type === 'currentRead'){
+            var header = activity.name + ' has marked his current read';
+            var data = activity.data;
+            var {imageSrc,author,category} = await extractImage(data)
+        } else if(activity.type === 'lastRead'){
+
+        } else if(activity.type === 'bookReview'){
+
+        }
+
+        activitiesList.innerHTML = activitiesList.innerHTML + `<div class='activityBlock' style='background: linear-gradient(` +
+        `#37577340` +
+        `, rgba(0, 0, 0, 0));'>` +
+        `<p id="activityHeader">${header}</p>`+
+        `<img class='activityImage' src='${imageSrc}'` +
+        `' alt='cover'>`+
+        `<div class='book-info'><h3 class='book-title'><a onclick='displayBookCard("${data}");' target='_blank'>${data}</a></h3><div class='book-authors'><a onclick='displayBookCard("${author}");' target='_blank'>${author}</a></div>`
+        `</div>`
+        
+    })
+
+})
 
 
 
@@ -243,8 +306,25 @@ const extractThumbnail = ({ imageLinks }) => {
     return imageLinks.thumbnail.replace("http://", "https://");
 };
 
+const extractImage = async (title) => {
+    var imageSrc = '';
+    var author='';
+    var category='';
+    const bookList = await getBooks(title);
+    bookList.items.forEach(item=>{
+        if(item.volumeInfo.title === title){
+             imageSrc = item.volumeInfo.imageLinks.thumbnail;
+             author = item.volumeInfo.authors[0];
+             category = item.volumeInfo.categories[0];
+        }
+    })
+    return {imageSrc,author,category};
+}
+
 const drawListBook = async () => {
-    document.getElementById('bookProfile').style.display='none';
+    bookSuggestionList.innerHTML=""
+    bookSuggestionRefresh.innerHTML=""
+    document.getElementById('bookProfile').style.display = 'none';
     if (searchBooks.value != "") {
         bookContainer.style.display = "flex";
         bookContainer.innerHTML = `<div class='prompt'><div class="loader"></div></div>`;
@@ -281,12 +361,107 @@ const drawListBook = async () => {
 };
 
 function addOnlineUser(userName) {
-    socket.emit('addUserToOnline',userName);
+    socket.emit('addUserToOnline', userName);
 }
 
 const debounce = (fn, time, to = 0) => {
     to ? clearTimeout(to) : (to = setTimeout(drawListBook, time));
 };
+
+async function getBookSuggestionForThisUser() {
+    bookSuggestionList.innerHTML = `<p id="suggestionWaitMessage">Please wait while we fecth suggestions based on your interests</p>`
+    var bookSuggestion1 = await getBooks(`${this.favAuthorOfThisUser}`);
+    var bookSuggestion2 = await getBooks(`${this.favGenreOfThisUSer}`);
+    var interMediateData1 = await getBooks(`${this.lastReadBookByThisUser}&maxResults=2`);
+    var lastReadAuthor = '';
+    if (interMediateData1.items[0].volumeInfo.authors != undefined &&
+        interMediateData1.items[0].volumeInfo.authors != null &&
+        interMediateData1.items[0].volumeInfo.authors.length > 0) {
+        lastReadAuthor = interMediateData1.items[0].volumeInfo.authors[0];
+    } else {
+        lastReadAuthor = this.favAuthorOfThisUser
+    }
+    var lastReadcategory= '';
+    if (interMediateData1.items[0].volumeInfo.categories != undefined &&
+        interMediateData1.items[0].volumeInfo.categories != null &&
+        interMediateData1.items[0].volumeInfo.categories.length > 0) {
+            lastReadcategory = interMediateData1.items[0].volumeInfo.categories[0];
+    } else {
+        lastReadcategory = this.favGenreOfThisUSer
+    }
+    
+    interMediateData1.items.forEach(data => {
+        if (data.volumeInfo.title === lastReadBookByThisUser) {
+            lastReadAuthor = data.volumeInfo.authors[0]
+            lastReadcategory = data.volumeInfo.categories[0]
+        }
+    })
+    var bookSuggestion3 = await getBooks(`${lastReadAuthor}`);
+    var bookSuggestion4 = await getBooks(`${lastReadcategory}`);
+
+    var len1= bookSuggestion1.items.length;
+    var len2= bookSuggestion2.items.length;
+    var len3= bookSuggestion3.items.length;
+    var len4= bookSuggestion4.items.length;
+    
+    var randomX= Math.floor(Math.random() * len1);
+    var randomX2= Math.floor(Math.random() * len1);
+    var randomY1= Math.floor(Math.random() * len2);
+    var randomY2= Math.floor(Math.random() * len2);
+    while(randomY2 === randomY1){
+        randomY2 = Math.floor(Math.random() * len2);
+    }
+    var randomY3= Math.floor(Math.random() * len2);
+    while(randomY3 === randomY1 || randomY3 === randomY2){
+        randomY3 = Math.floor(Math.random() * len2)
+    }
+    var randomZ= Math.floor(Math.random() * len3);
+    var randomM= Math.floor(Math.random() * len4);
+    var finalBookSuggestionList = [];
+    finalBookSuggestionList.push(bookSuggestion1.items[randomX]);
+    finalBookSuggestionList.push(bookSuggestion1.items[randomX2]);
+    finalBookSuggestionList.push(bookSuggestion2.items[randomY1]);
+    finalBookSuggestionList.push(bookSuggestion2.items[randomY2]);
+    finalBookSuggestionList.push(bookSuggestion2.items[randomY3]);
+    finalBookSuggestionList.push(bookSuggestion3.items[randomZ]);
+    
+    for (let i = 0; i < finalBookSuggestionList.length; i++) {
+        this.bookListLocal.push(finalBookSuggestionList[i])
+    }
+
+    bookSuggestionList.style.display = "flex";
+    document.getElementById('bookListSuggestion').style.display="none"
+    bookSuggestionList.innerHTML = `<div class='prompt'><div class="loader"></div></div>`;
+    bookSuggestionRefresh.innerHTML =  `<img id="refreshIcon" src="/images/refresh.png" width="30" height="30">`;
+    bookSuggestionList.innerHTML = finalBookSuggestionList
+        .map(
+            ({ volumeInfo }) =>
+
+                `<div class='book' style='background: linear-gradient(` +
+                getRandomColor() +
+                `, rgba(0, 0, 0, 0));'><a onclick='displayBookCard("${volumeInfo.title}");' target='_blank'><img class='thumbnail' src='` +
+                extractThumbnail(volumeInfo) +
+                `' alt='cover'></a><div class='book-info'><h3 class='book-title'><a onclick='displayBookCard("${volumeInfo.title}");' target='_blank'>${volumeInfo.title}</a></h3><div class='book-authors'><a onclick='displayBookCard("${volumeInfo.title}");' target='_blank'>${volumeInfo.authors}</a></div><div class='info'  style='background-color: ` +
+                getRandomColor() +
+                `;'>` +
+                (volumeInfo.categories === undefined
+                    ? "Others"
+                    : volumeInfo.categories) +
+                `</div></div></div>`
+        )
+        .join("");
+        
+
+}
+
+async function getNotificationsAndMessages(userName) {
+    socket.emit('getNotificationsAndMessages', userName);
+}
+
+function getActivities(userName) {
+    socket.emit('fetchActivites', userName);
+}
+
 
 /*
 *  search related listeners
@@ -348,10 +523,10 @@ chatIndicator.addEventListener('mouseleave', e => {
 connectionIndicator.addEventListener('mouseenter', e => {
     document.getElementById('contactIndicatorText').style.display = "block"
     document.getElementById('contactIndicatorText').style.color = "#000"
-    if(this.isAddedAsConnection || this.isAddedAsConnection === true){
+    if (this.isAddedAsConnection || this.isAddedAsConnection === true) {
         document.getElementById('contactIndicatorText').innerHTML = "Already in connection " + this.profileNameLocal
-    }else{
-    document.getElementById('contactIndicatorText').innerHTML = "connect with " + this.profileNameLocal
+    } else {
+        document.getElementById('contactIndicatorText').innerHTML = "connect with " + this.profileNameLocal
     }
 })
 
@@ -360,20 +535,20 @@ connectionIndicator.addEventListener('mouseleave', e => {
 })
 
 connectionIndicator.addEventListener('click', e => {
-    if(this.isAddedAsConnection || this.isAddedAsConnection ===  true){
+    if (this.isAddedAsConnection || this.isAddedAsConnection === true) {
         alert('Already a connection!')
     } else {
-        socket.emit('addConnection', this.userNameLocal,profileNameLocal)
-        
+        socket.emit('addConnection', this.userNameLocal, profileNameLocal)
+
     }
-})  
+})
 
 
 
 editIcon.addEventListener('click', e => {
-    document.getElementById('search-box').style.background="yellow"
+    document.getElementById('search-box').style.background = "yellow"
     setTimeout(function () {
-        document.getElementById('search-box').style.background="white"
+        document.getElementById('search-box').style.background = "white"
     }, 5000);
 })
 
@@ -392,13 +567,18 @@ goButtonBookShelf.addEventListener('click', e => {
 })
 
 notificationIcon.addEventListener('click', e => {
-    if(toggleNotification || toggleNotification === true){
-        notificationListLocal.push('skdfbsdkfjbsdfbsdkjfbsdkfjbsdfkjb')
-    const html = Mustache.render(notifcslistBartemplate, {
-        notificationListLocal
-    })
-    notificsListBarElement.innerHTML = html
-    toggleNotification = false;
+    if (toggleNotification || toggleNotification === true) {
+        var recentNotifcsList = [];
+        for (let i = notificationListLocal.length - 1; i >= 0; i--) {
+            recentNotifcsList.push(notificationListLocal[i])
+        }
+        const html = Mustache.render(notifcslistBartemplate, {
+            recentNotifcsList
+        })
+        notificsListBarElement.innerHTML = html
+        toggleNotification = false;
+        notificationNumber.innerHTML = 0
+        notificationNumber.style.display = "none"
     } else {
         notificsListBarElement.innerHTML = ''
         toggleNotification = true;
@@ -406,6 +586,11 @@ notificationIcon.addEventListener('click', e => {
 
 
 })
+
+bookSuggestionRefresh.addEventListener('click', e => {
+    getBookSuggestionForThisUser();
+})
+
 
 
 /***************************************************************
@@ -421,7 +606,9 @@ searchBooks.addEventListener("input", () => debounce(drawListBook, 1000));
 function displayBookCard(title) {
     if (this.bookListLocal.length > 0) {
 
-        document.getElementById('bookListSuggestion').style.display='none'
+        document.getElementById('bookListSuggestion').style.display = 'none'
+        bookSuggestionList.style.display = 'none'
+        activitiesList.style.display = 'none'
 
         for (let i = 0; i < bookListLocal.length; i++) {
             if (bookListLocal[i].volumeInfo.title === title) {

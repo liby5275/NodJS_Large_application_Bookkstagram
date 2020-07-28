@@ -88,8 +88,19 @@ const isAddedToconnection = (userName, profileName) => {
     }
 }
 
+const getConnectionListForAUser = (userName)=>{
+    const connectionList = getConnectionList();
+
+    const tempList = connectionList.filter((user) => {
+        return user.userName === userName
+    })
+
+    return tempList[0].connectionList;
+}
+
 module.exports = {
     addConnection: addConnection,
     getConnectionList : getConnectionList,
-    isAddedToconnection : isAddedToconnection
+    isAddedToconnection : isAddedToconnection,
+    getConnectionListForAUser:getConnectionListForAUser
 }

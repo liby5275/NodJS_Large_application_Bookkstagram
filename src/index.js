@@ -7,6 +7,8 @@ const roomDependency = require('./room')
 const contactDependency = require('./contact')
 const booksDependency = require('./books')
 const connectionDependency = require('./connect')
+const notificationDependency = require('./notification')
+const activityDependency = require('./activites')
 const { profileEnd } = require('console')
 
 
@@ -33,7 +35,7 @@ io.on('connect', (socket) => {
                 if (istaken || istaken === 'true') {
                     socket.emit('warning', 'This username already taken. Take another one')
                 } else {
-                    console.log('lastBook'+lastReadBook)
+                    
                     await userDependency.addUser(_id, name, password, genre, author, book, lastReadBook, currentRead)
                     socket.emit('joincompleted', name)
                 }
@@ -115,6 +117,7 @@ io.on('connect', (socket) => {
     socket.on('updateBookShelf',async (selected,userName, bookName) => {
         if(selected === 'Current Read'){
             await userDependency.updateCurrentBook(userName,bookName)
+            await activityDependency.addactivity(userName,'currentRead',bookName)
         }
     })
 
@@ -123,14 +126,55 @@ io.on('connect', (socket) => {
         socket.emit('connectionAdded',profileName)
         let isUserOnline = await userDependency.ifUserIsOnline(profileName);
         if(isUserOnline || isUserOnline === true){
-        console.log('user is online')
+        
         socket.join(profileName)
-        socket.broadcast.to(profileName).emit('notifyTheUser',userName)
+        socket.broadcast.to(profileName).emit('notifyTheUser',userName,profileName)
         socket.leave(profileName)
+        await notificationDependency.addNotification(userName, profileName, 'connection','shown');
         }else {
-        
+            await notificationDependency.addNotification(userName, profileName,'connection', 'new');
         }
+            
+    })
+
+    socket.on('getNotificationsAndMessages', async (userName) => {
         
+        var notifcsForCurrentUser = await notificationDependency.getNotificationEntryForAProfile(userName);
+        
+        if( notifcsForCurrentUser != undefined && notifcsForCurrentUser.length>0){
+            
+        socket.emit('getNotifcsResponse', notifcsForCurrentUser);
+        await notificationDependency.changeNotificsState(userName)
+        }
+
+    })
+
+
+    socket.on('fetchActivites', async (userName) => {
+        var activitesTotal = [];
+        const connections = await connectionDependency.getConnectionListForAUser(userName);
+        if(connections != undefined && connections.length>0){
+
+            await connections.forEach(async connection => {
+
+                var activityListForThisConnection = await activityDependency.getactivityEntryForAProfile(connection);
+                if(activityListForThisConnection != undefined){
+                activityListForThisConnection.forEach(activity => {
+                    activitesTotal.push(activity);
+                })
+            }
+
+            })
+
+
+            if(activitesTotal.length>0){
+            socket.emit('activites',activitesTotal)
+            } else {
+                socket.emit('noConnection',userName);
+            }
+        } else {
+            socket.emit('noConnection',userName);
+        }
     })
 
     socket.on('location', (coords, callback) => {
