@@ -66,6 +66,7 @@ socket.on('profileDetails', ({ userData, isAddedToContact, isAddedConnection }) 
         document.getElementById('userProfile').style.display = "none";
     } else {
 
+        
         document.getElementById('centerContent').style.opacity = '1'
         document.getElementById('profileName').innerHTML = userData.name;
         document.getElementById('favGenre').innerHTML = 'Favourite Genre - ' + userData.genre;
@@ -81,8 +82,8 @@ socket.on('profileDetails', ({ userData, isAddedToContact, isAddedConnection }) 
             document.getElementById("contactIndicator").src = "/images/add.jpg";
         }
         document.getElementById('userProfile').style.display = "block";
-
-
+        bookSuggestionList.style.display="none";
+        bookSuggestionRefresh.innerHTML=""
     }
 
 })
@@ -177,9 +178,14 @@ socket.on('activites',async activitesTotal => {
 
     await activitesTotal.forEach(async activity => {
         if(activity.type === 'currentRead'){
-            var header = activity.name + ' has marked his current read';
+            
             var data = activity.data;
-            var {imageSrc,author,category} = await extractImage(data)
+            var result = await extractImage(data)
+            var author= result.author;
+            var imageSrc = result.imageSrc;
+            var rating =  result.rating;
+            var desc = result.desc.substring(0, 100) +'.Click to Read more..';
+            var header = activity.name + ' is reading '+data+' now';
         } else if(activity.type === 'lastRead'){
 
         } else if(activity.type === 'bookReview'){
@@ -188,11 +194,16 @@ socket.on('activites',async activitesTotal => {
 
         activitiesList.innerHTML = activitiesList.innerHTML + `<div class='activityBlock' style='background: linear-gradient(` +
         `#37577340` +
-        `, rgba(0, 0, 0, 0));'>` +
-        `<p id="activityHeader">${header}</p>`+
+        `, rgba(0, 156, 158, 3));'>` +
+        `<div id="activity-area"><p id="activityHeader">${header}</p>`+
+        `<p id="titleInActivity">${data}</p>`+
+        `<p id="author">${author}</p>`+
+        `<p id="activityRating">${rating}</p>`+
+        `<p id="activityDesc">${desc}</p>`+
+        `</div>`+
         `<img class='activityImage' src='${imageSrc}'` +
         `' alt='cover'>`+
-        `<div class='book-info'><h3 class='book-title'><a onclick='displayBookCard("${data}");' target='_blank'>${data}</a></h3><div class='book-authors'><a onclick='displayBookCard("${author}");' target='_blank'>${author}</a></div>`
+        
         `</div>`
         
     })
@@ -310,15 +321,21 @@ const extractImage = async (title) => {
     var imageSrc = '';
     var author='';
     var category='';
+    var rating='';
+    var desc='';
+    var result;
     const bookList = await getBooks(title);
     bookList.items.forEach(item=>{
         if(item.volumeInfo.title === title){
              imageSrc = item.volumeInfo.imageLinks.thumbnail;
              author = item.volumeInfo.authors[0];
              category = item.volumeInfo.categories[0];
+             rating = item.volumeInfo.averageRating;
+             desc = item.volumeInfo.description;
+             result = {imageSrc,author,category,rating,desc} 
         }
     })
-    return {imageSrc,author,category};
+    return result;
 }
 
 const drawListBook = async () => {

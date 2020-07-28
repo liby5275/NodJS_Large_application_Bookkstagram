@@ -198,13 +198,13 @@ color: #000;
 
 .modal { 
     display: none; 
-    position: relative; 
+    position: absolute; 
     z-index: 1; 
     left: 0; 
     top: 0; 
     width:45vw;  
     overflow: auto;
-    height: 100%;
+    height: 78%;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -221,11 +221,14 @@ color: #000;
     border-right-style: groove;
     border-right-width: 8px;
     border-right-color: #cccccc;
-    margin-left:80px;
+    margin-left:25%;
+    margin-top: 5%;
+    background: linear-gradient(#37577340, rgb(30 179 145));
 }
 
 #userProfile{
-    background-image: url(/images/bg4.jpg);
+    
+    background: url('/images/brown1.jpg');
 }
 
 /*define the modal-content background*/ 
@@ -497,9 +500,22 @@ color: #000;
     
   }
 
+  #titleInActivity{
+    font-style: unset;
+    font-size: larger;
+    margin-top: 5%;
+  }
+
+  #author {
+    margin-top: 5%;
+  }
+
   #activityHeader{
     font-family: cursive;
     font-size: large;
+  }
+  #activity-area{
+      text-align: center;
   }
 
   .activityImage{
