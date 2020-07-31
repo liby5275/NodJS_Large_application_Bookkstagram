@@ -1,3 +1,51 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300');
+
+#activityOuterHeadFirst {
+  display:inline-block;
+  overflow:hidden;
+  white-space:nowrap;
+}
+
+#activityOuterHeadFirst {    /* For increasing performance 
+                       ID/Class should've been used. 
+                       For a small demo 
+                       it's okaish for now */
+  animation: showup 7s infinite;
+}
+
+#activityOuterHeadSecond {
+  width:0px;
+  animation: reveal 7s infinite;
+}
+
+#activityOuterHeadSecond span {
+  margin-left:-355px;
+  animation: slidein 7s infinite;
+}
+
+@keyframes showup {
+    0% {opacity:0;}
+    20% {opacity:1;}
+    80% {opacity:1;}
+    100% {opacity:0;}
+}
+
+@keyframes slidein {
+    0% { margin-left:-800px; }
+    20% { margin-left:-800px; }
+    35% { margin-left:0px; }
+    100% { margin-left:0px; }
+}
+
+@keyframes reveal {
+    0% {opacity:0;width:0px;}
+    20% {opacity:1;width:0px;}
+    30% {width:355px;}
+    80% {opacity:1;}
+    100% {opacity:0;width:355px;}
+}
+
+
 .container{
     background-color:#e4e5e6;
 }
@@ -226,6 +274,24 @@ color: #000;
     background: linear-gradient(#37577340, rgb(30 179 145));
 }
 
+.modal2 { 
+  display: none; 
+  position: absolute; 
+  z-index: 1; 
+  left: 0; 
+  top: 0; 
+  width:45vw;  
+  overflow: auto;
+  height: 78%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 5%;
+  background: linear-gradient(#37577340, rgb(30 179 145));
+  color: #000;
+}
+
+
 #userProfile{
     
     background: url('/images/brown1.jpg');
@@ -246,7 +312,7 @@ color: #000;
     position: absolute; 
     right: 35px; 
     top: 15px; 
-    color: #fff; 
+    color: #000; 
     font-size: 40px; 
     font-weight: bold; 
 } 
@@ -349,7 +415,21 @@ color: #000;
     border-radius: 30px;
 }
 
-#bookImage{
+#bookProfile2{
+  width: 50%;
+  height: 80%;
+  margin-left: 24%;
+  margin-top: 7%;
+  border-radius: 30px;
+  background: url('/images/bookProfile.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: fixed;
+}
+
+#bookImage,
+#bookImage2{
     margin-left: 3%;
     margin-top: 6px;
     border-style: double;
@@ -360,8 +440,11 @@ color: #000;
     width: 73%;
     overflow-y: scroll;
 }
+#bookDetails2{
+  width: 73%;
+}
 
-#bookName{
+#bookName,#bookName2{
     font-size: xx-large;
     text-transform: capitalize;
     font-style: italic;
@@ -370,7 +453,7 @@ color: #000;
     text-align: center;
 }
 
-#bookAuthor{
+#bookAuthor,#bookAuthor2{
     text-align: center;
     margin-bottom: 6%;
 }
@@ -379,32 +462,40 @@ color: #000;
     text-align: center;
 }
 
-#bookIcons{
+#bookIcons,#bookIcons2{
     display: flex;
     justify-content: center;
 }
 
 #genreIcon,
 #ratingIcon,
-#totalPagesIcon{
+#totalPagesIcon,
+#genreIcon2,
+#ratingIcon2,
+#totalPagesIcon2{
     padding-left: 3%;
     margin-top: 2%;
 }
 
 #genreIconValue,
 #ratingIconValue,
-#totalPagesIconValue{
+#totalPagesIconValue,
+#genreIconValue2,
+#ratingIconValue2,
+#totalPagesIconValue2{
     margin-left: 3px;
 }
 
-#bookDescription{
+#bookDescription,
+#bookDescription2{
     margin-left: 3%;
     margin-right: 3%;
     text-align: justify;
     font-style: oblique;
 }
 
-#bookShelf{
+#bookShelf,
+#bookShelf2{
     height: 25px;
     position: fixed;
     width: 9%;
@@ -421,6 +512,13 @@ color: #000;
 	color: #222;
 	outline: none;
 }
+#bookShelf2:focus {
+	border-color: #aaa;
+	box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+	box-shadow: 0 0 0 3px -moz-mac-focusring;
+	color: #222;
+	outline: none;
+}
 .select-items {
     position: absolute;
     background-color: DodgerBlue;
@@ -430,7 +528,8 @@ color: #000;
     z-index: 99;
   }
 
-#goButtonBookShelf{
+#goButtonBookShelf,
+#goButtonBookShelf2{
     position: fixed;
     margin-top: 15.8%;
     margin-left: 11.5%;
@@ -497,9 +596,11 @@ color: #000;
     padding: 32px;
     border-radius: 32px;
     flex: 1;
+    margin-bottom: 6%;
     
   }
 
+  
   #titleInActivity{
     font-style: unset;
     font-size: larger;
@@ -512,7 +613,95 @@ color: #000;
 
   #activityHeader{
     font-family: cursive;
-    font-size: large;
+    font-size: x-large;
+  }
+  #activityOuterHeader{
+    font-size: x-large;
+    padding-left: 4%;
+    font-family: monospace;
+  }
+  #finsihedBookHeader{
+    padding-left: 4%;
+    font-size: x-large;
+    font-family: monospace;
+  }
+  #activityOuter {
+    display:flex;
+    overflow:hidden;
+    white-space:nowrap;
+    padding-left: 4%;
+  }
+  
+  #activityOuterHeadFirst {    /* For increasing performance 
+                         ID/Class should've been used. 
+                         For a small demo 
+                         it's okaish for now */
+    animation: showup 7s infinite;
+    font-size: x-large;
+    padding-left: 4%;
+    font-family: monospace;
+    text-transform: capitalize;
+  }
+
+  #activityOuterHeadFirstFinished{
+    animation: blinkingText 1.2s infinite;
+    font-size: xx-large;
+    padding-left: 4%;
+    font-family: monospace;
+    text-transform: capitalize;
+  }
+
+  #activityOuterHeadSecondFinsihed{
+    width:0px;
+    animation: blinkingText 1.2s infinite;
+    font-size: xx-large;
+    padding-left: 1%;
+    font-family: monospace;
+    text-transform: capitalize;
+  }
+  
+  #activityOuterHeadSecond {
+    width:0px;
+    animation: reveal 7s infinite;
+    font-size: x-large;
+    padding-left: 1%;
+    font-family: monospace;
+    text-transform: capitalize;
+  }
+  
+  #activityOuterHeadSecond span {
+    margin-left:-355px;
+    animation: slidein 7s infinite;
+  }
+
+  @keyframes blinkingText{
+    0%{     color: #000;    }
+    49%{    color: #e62750; }
+    60%{    color: rgb(96, 31, 218); }
+    99%{    color:transparent;  }
+    100%{   color: #000;    }
+}
+  
+  @keyframes showup {
+      0% {opacity:0;}
+      20% {opacity:1;}
+      80% {opacity:1;}
+      100% {opacity:0;}
+  }
+  
+  @keyframes slidein {
+      0% { margin-left:-800px; }
+      20% { margin-left:-800px; }
+      35% { margin-left:0px; }
+      100% { margin-left:0px; }
+  }
+  
+  @keyframes reveal {
+      0% {opacity:0;width:0px;}
+      20% {opacity:1;width:0px;}
+      30% {width:355px;}
+      80% {opacity:1;}
+      100% {opacity:0;width:355px;}
   }
   #activity-area{
       text-align: center;

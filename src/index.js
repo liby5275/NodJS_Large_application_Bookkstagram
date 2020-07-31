@@ -118,6 +118,10 @@ io.on('connect', (socket) => {
         if(selected === 'Current Read'){
             await userDependency.updateCurrentBook(userName,bookName)
             await activityDependency.addactivity(userName,'currentRead',bookName)
+        } else if(selected === 'Finsished Reading'){
+            console.log('check1');
+            await userDependency.updateLastBook(userName,bookName)
+            await activityDependency.addactivity(userName,'lastRead',bookName)
         }
     })
 

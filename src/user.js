@@ -22,6 +22,20 @@ const updateCurrentBook = (userName, bookName) => {
     fs.writeFileSync('files/userData.json', JSON.stringify(userList))
 }
 
+const updateLastBook = (userName, bookName) => {
+    console.log('check2 '+userName+' '+bookName)
+    var user = fetchUser(userName);
+    removeUser(userName);
+    var id = user.id; var password= user.password; var genre= user.genre;var author=user.author;
+    var name = user.name; var book = user.book;
+    var currentRead = user.currentRead;
+    var lastReadBook = bookName;
+    const updatedUser = { id, name, password, genre, author, book, lastReadBook, currentRead }
+    const userList = getUserDataList();
+    userList.push(updatedUser);
+    fs.writeFileSync('files/userData.json', JSON.stringify(userList))
+}
+
 
 const getUserDataList = () =>{
     try{
@@ -165,6 +179,7 @@ module.exports = {
     isUsernameAlreadyTaken: isUsernameAlreadyTaken,
     addUser: addUser,
     updateCurrentBook:updateCurrentBook,
+    updateLastBook:updateLastBook,
     validateUserCreds:validateUserCreds,
     removeUser:removeUser,
     fetchUser:fetchUser,

@@ -9,6 +9,7 @@ const connectionIndicator = document.getElementById("connectionIndicator")
 const editIcon = document.getElementById("editIcon")
 const bookSearchPanel = document.getElementById("bookSearchPanel")
 const goButtonBookShelf = document.getElementById("goButtonBookShelf")
+const goButtonBookShelf2 = document.getElementById("goButtonBookShelf2")
 const notificationNumber = document.getElementById("notificationNumber")
 const notificationIcon = document.getElementById('notificationIcon')
 const bookSuggestionList = document.getElementById('bookSuggestionList')
@@ -30,6 +31,7 @@ var toggleNotification = true;
 var favAuthorOfThisUser = '';
 var favGenreOfThisUSer = '';
 var lastReadBookByThisUser = '';
+var descLocal ='';
 
 
 /*
@@ -52,6 +54,7 @@ socket.on('contactList', (userData) => {
     }
 
     var title = "your contact book"
+    contactList = contactList.slice(0,5)
     const html = Mustache.render(sidebarTemplate, {
         contactList
     })
@@ -66,7 +69,7 @@ socket.on('profileDetails', ({ userData, isAddedToContact, isAddedConnection }) 
         document.getElementById('userProfile').style.display = "none";
     } else {
 
-        
+
         document.getElementById('centerContent').style.opacity = '1'
         document.getElementById('profileName').innerHTML = userData.name;
         document.getElementById('favGenre').innerHTML = 'Favourite Genre - ' + userData.genre;
@@ -82,8 +85,8 @@ socket.on('profileDetails', ({ userData, isAddedToContact, isAddedConnection }) 
             document.getElementById("contactIndicator").src = "/images/add.jpg";
         }
         document.getElementById('userProfile').style.display = "block";
-        bookSuggestionList.style.display="none";
-        bookSuggestionRefresh.innerHTML=""
+        bookSuggestionList.style.display = "none";
+        bookSuggestionRefresh.innerHTML = ""
     }
 
 })
@@ -140,72 +143,87 @@ socket.on('connectionAdded', profileName => {
     alert(profileName + ' has been added as your connection')
 })
 
-socket.on('notifyTheUser', (userName,profileName) => {
-    if(profileName === this.userNameLocal){
-    var currentNumber = notificationNumber.innerHTML
-    notificationNumber.innerHTML = Number(currentNumber) + 1
-    notificationNumber.style.display = "block"
-    notificationListLocal.push(userName + ' is now connected to you. Click to view more')
+socket.on('notifyTheUser', (userName, profileName) => {
+    if (profileName === this.userNameLocal) {
+        var currentNumber = notificationNumber.innerHTML
+        notificationNumber.innerHTML = Number(currentNumber) + 1
+        notificationNumber.style.display = "block"
+        notificationListLocal.push(userName + ' is now connected to you. Click to view more')
     }
 })
 
 socket.on('getNotifcsResponse', notifcsForCurrentUser => {
 
     var anyNewNotifcs = false;
-    let count =0;
+    let count = 0;
     notifcsForCurrentUser[0].notificList.forEach(item => {
-        if(item.state === "new"){
+        if (item.state === "new") {
             anyNewNotifcs = true;
-            count =count+1;
-            
+            count = count + 1;
+
         }
         notificationListLocal.push(item.fromId + ' is now connected to you. Click to view more')
     })
 
-    if(anyNewNotifcs || anyNewNotifcs === 'true'){
+    if (anyNewNotifcs || anyNewNotifcs === 'true') {
         var currentNumber = notificationNumber.innerHTML
         notificationNumber.innerHTML = Number(currentNumber) + count;
         notificationNumber.style.display = "block"
     }
 })
 
-socket.on('activites',async activitesTotal => {
+socket.on('activites', async activitesTotal => {
     console.log('hello')
-    
-    document.getElementById('bookListSuggestion').style.display="none"
+
+    document.getElementById('bookListSuggestion').style.display = "none"
     bookSuggestionList.style.display = "none";
     activitiesList.innerHTML = `<div class='prompt'><div class="loader"></div></div>`;
 
     await activitesTotal.forEach(async activity => {
-        if(activity.type === 'currentRead'){
-            
+        if (activity.type === 'currentRead') {
+
             var data = activity.data;
             var result = await extractImage(data)
-            var author= result.author;
+            var author = result.author;
             var imageSrc = result.imageSrc;
-            var rating =  result.rating;
-            var desc = result.desc.substring(0, 100) +'.Click to Read more..';
-            var header = activity.name + ' is reading '+data+' now';
-        } else if(activity.type === 'lastRead'){
-
-        } else if(activity.type === 'bookReview'){
+            var rating = result.rating;
+            var desc = result.desc.substring(0, 100) + '.Click on the image to Read more..';
+            var descFull = escapeHtml(result.desc);
+            console.log(descFull)
+            var header = activity.name + ' is reading ' + data + ' now';
+            activitiesList.innerHTML = activitiesList.innerHTML + `<div id="activityOuter"><div id="activityOuterHeadFirst">${activity.name}</div>` +
+            `<div id="activityOuterHeadSecond"><span>has marked their current read</span></div></div>`
+              
+        } else if (activity.type === 'lastRead') {
+            var data = activity.data;
+            var result = await extractImage(data)
+            var author = result.author;
+            var imageSrc = result.imageSrc;
+            var rating = result.rating;
+            var desc = result.desc.substring(0, 100) + '.Click on the image to Read more..';
+            var descFull = escapeHtml(result.desc);
+            console.log(descFull)
+            var header = activity.name + ' has finished ' + data;
+            activitiesList.innerHTML = activitiesList.innerHTML + `<div id="activityOuter"><div id="activityOuterHeadFirstFinished">Well Done!</div>` +
+            `<div id="activityOuterHeadSecondFinsihed"><span>${activity.name} has finsihed a book</span></div></div>`
+        } else if (activity.type === 'bookReview') {
 
         }
 
         activitiesList.innerHTML = activitiesList.innerHTML + `<div class='activityBlock' style='background: linear-gradient(` +
-        `#37577340` +
-        `, rgba(0, 156, 158, 3));'>` +
-        `<div id="activity-area"><p id="activityHeader">${header}</p>`+
-        `<p id="titleInActivity">${data}</p>`+
-        `<p id="author">${author}</p>`+
-        `<p id="activityRating">${rating}</p>`+
-        `<p id="activityDesc">${desc}</p>`+
-        `</div>`+
-        `<img class='activityImage' src='${imageSrc}'` +
-        `' alt='cover'>`+
-        
-        `</div>`
-        
+        getRandomColor()  +
+            `, rgba(0, 156, 158, 3));'>` +
+            `<div id="activity-area"><p id="activityHeader">${header}</p>` +
+            `<p id="titleInActivity">${data}</p>` +
+            `<p id="author">${author}</p>` +
+            `<p id="activityRating">${rating}</p>` +
+            `<p id="activityDesc">${desc}</p>` +
+            `</div>` +
+            `<img class='activityImage' src='${imageSrc}' onclick='displayBookCardFromActivity("${result.title}","${descFull}","${result.imageSrc}","${result.author}","${result.pages}","${result.category}", "${result.rating}");'` +
+            `' alt='cover'><a onclick='displayBookCardFromActivity2("${result.title}","${result.author}");' target='_blank'>` +
+
+            `</div>`
+
     })
 
 })
@@ -216,6 +234,14 @@ socket.on('activites',async activitesTotal => {
  * This is for functions
  ***********************************************/
 
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+ }
 function saveUserData(userNAme, password, genre, author, book, lastReadBook, currentRead) {
 
     socket.emit('joined', {
@@ -319,28 +345,36 @@ const extractThumbnail = ({ imageLinks }) => {
 
 const extractImage = async (title) => {
     var imageSrc = '';
-    var author='';
-    var category='';
-    var rating='';
-    var desc='';
+    var author = '';
+    var category = '';
+    var rating = '';
+    var desc = '';
+    var pages = '';
     var result;
     const bookList = await getBooks(title);
-    bookList.items.forEach(item=>{
-        if(item.volumeInfo.title === title){
-             imageSrc = item.volumeInfo.imageLinks.thumbnail;
-             author = item.volumeInfo.authors[0];
-             category = item.volumeInfo.categories[0];
-             rating = item.volumeInfo.averageRating;
-             desc = item.volumeInfo.description;
-             result = {imageSrc,author,category,rating,desc} 
+    var isProcessed = false;
+    bookList.items.forEach(item => {
+        if (item.volumeInfo.title === title && !isProcessed) {
+            isProcessed = true;
+            imageSrc = item.volumeInfo.imageLinks.thumbnail;
+            author = item.volumeInfo.authors[0];
+            if(item.volumeInfo.categories != undefined){
+            category = item.volumeInfo.categories[0];
+            } else {
+                category = undefined;
+            }
+            rating = item.volumeInfo.averageRating;
+            desc = item.volumeInfo.description;
+            pages = item.volumeInfo.pageCount
+            result = {title,imageSrc, author, category, rating, desc, pages }
         }
     })
     return result;
 }
 
 const drawListBook = async () => {
-    bookSuggestionList.innerHTML=""
-    bookSuggestionRefresh.innerHTML=""
+    bookSuggestionList.innerHTML = ""
+    bookSuggestionRefresh.innerHTML = ""
     document.getElementById('bookProfile').style.display = 'none';
     if (searchBooks.value != "") {
         bookContainer.style.display = "flex";
@@ -398,15 +432,15 @@ async function getBookSuggestionForThisUser() {
     } else {
         lastReadAuthor = this.favAuthorOfThisUser
     }
-    var lastReadcategory= '';
+    var lastReadcategory = '';
     if (interMediateData1.items[0].volumeInfo.categories != undefined &&
         interMediateData1.items[0].volumeInfo.categories != null &&
         interMediateData1.items[0].volumeInfo.categories.length > 0) {
-            lastReadcategory = interMediateData1.items[0].volumeInfo.categories[0];
+        lastReadcategory = interMediateData1.items[0].volumeInfo.categories[0];
     } else {
         lastReadcategory = this.favGenreOfThisUSer
     }
-    
+
     interMediateData1.items.forEach(data => {
         if (data.volumeInfo.title === lastReadBookByThisUser) {
             lastReadAuthor = data.volumeInfo.authors[0]
@@ -416,24 +450,24 @@ async function getBookSuggestionForThisUser() {
     var bookSuggestion3 = await getBooks(`${lastReadAuthor}`);
     var bookSuggestion4 = await getBooks(`${lastReadcategory}`);
 
-    var len1= bookSuggestion1.items.length;
-    var len2= bookSuggestion2.items.length;
-    var len3= bookSuggestion3.items.length;
-    var len4= bookSuggestion4.items.length;
-    
-    var randomX= Math.floor(Math.random() * len1);
-    var randomX2= Math.floor(Math.random() * len1);
-    var randomY1= Math.floor(Math.random() * len2);
-    var randomY2= Math.floor(Math.random() * len2);
-    while(randomY2 === randomY1){
+    var len1 = bookSuggestion1.items.length;
+    var len2 = bookSuggestion2.items.length;
+    var len3 = bookSuggestion3.items.length;
+    var len4 = bookSuggestion4.items.length;
+
+    var randomX = Math.floor(Math.random() * len1);
+    var randomX2 = Math.floor(Math.random() * len1);
+    var randomY1 = Math.floor(Math.random() * len2);
+    var randomY2 = Math.floor(Math.random() * len2);
+    while (randomY2 === randomY1) {
         randomY2 = Math.floor(Math.random() * len2);
     }
-    var randomY3= Math.floor(Math.random() * len2);
-    while(randomY3 === randomY1 || randomY3 === randomY2){
+    var randomY3 = Math.floor(Math.random() * len2);
+    while (randomY3 === randomY1 || randomY3 === randomY2) {
         randomY3 = Math.floor(Math.random() * len2)
     }
-    var randomZ= Math.floor(Math.random() * len3);
-    var randomM= Math.floor(Math.random() * len4);
+    var randomZ = Math.floor(Math.random() * len3);
+    var randomM = Math.floor(Math.random() * len4);
     var finalBookSuggestionList = [];
     finalBookSuggestionList.push(bookSuggestion1.items[randomX]);
     finalBookSuggestionList.push(bookSuggestion1.items[randomX2]);
@@ -441,15 +475,15 @@ async function getBookSuggestionForThisUser() {
     finalBookSuggestionList.push(bookSuggestion2.items[randomY2]);
     finalBookSuggestionList.push(bookSuggestion2.items[randomY3]);
     finalBookSuggestionList.push(bookSuggestion3.items[randomZ]);
-    
+
     for (let i = 0; i < finalBookSuggestionList.length; i++) {
         this.bookListLocal.push(finalBookSuggestionList[i])
     }
 
     bookSuggestionList.style.display = "flex";
-    document.getElementById('bookListSuggestion').style.display="none"
+    document.getElementById('bookListSuggestion').style.display = "none"
     bookSuggestionList.innerHTML = `<div class='prompt'><div class="loader"></div></div>`;
-    bookSuggestionRefresh.innerHTML =  `<img id="refreshIcon" src="/images/refresh.png" width="30" height="30">`;
+    bookSuggestionRefresh.innerHTML = `<img id="refreshIcon" src="/images/refresh.png" width="30" height="30">`;
     bookSuggestionList.innerHTML = finalBookSuggestionList
         .map(
             ({ volumeInfo }) =>
@@ -467,7 +501,7 @@ async function getBookSuggestionForThisUser() {
                 `</div></div></div>`
         )
         .join("");
-        
+
 
 }
 
@@ -580,18 +614,39 @@ goButtonBookShelf.addEventListener('click', e => {
     } else {
         socket.emit('updateBookShelf', selected, this.userNameLocal, bookName)
         alert('Book shelf updated!')
+    } 
+})
+
+goButtonBookShelf2.addEventListener('click', e => {
+    var selected = document.getElementById('bookShelf2').value;
+    var bookName = document.getElementById('bookName2').innerHTML
+    if (selected === 'Not Read') {
+        alert('please select a book shelf other that (not read)')
+    } else {
+        socket.emit('updateBookShelf', selected, this.userNameLocal, bookName)
+        alert('Book shelf updated!')
     }
 })
 
 notificationIcon.addEventListener('click', e => {
     if (toggleNotification || toggleNotification === true) {
         var recentNotifcsList = [];
+        
         for (let i = notificationListLocal.length - 1; i >= 0; i--) {
             recentNotifcsList.push(notificationListLocal[i])
         }
-        const html = Mustache.render(notifcslistBartemplate, {
-            recentNotifcsList
-        })
+        var html='';
+        if(recentNotifcsList.length>5){
+             recentNotifcsList = recentNotifcsList.slice(0,6)
+            html = Mustache.render(notifcslistBartemplate, {
+                recentNotifcsList
+            })
+        }else {
+            html = Mustache.render(notifcslistBartemplate, {
+                recentNotifcsList
+            })
+        }
+        
         notificsListBarElement.innerHTML = html
         toggleNotification = false;
         notificationNumber.innerHTML = 0
@@ -626,9 +681,11 @@ function displayBookCard(title) {
         document.getElementById('bookListSuggestion').style.display = 'none'
         bookSuggestionList.style.display = 'none'
         activitiesList.style.display = 'none'
+        var isProcessed = false;
 
         for (let i = 0; i < bookListLocal.length; i++) {
-            if (bookListLocal[i].volumeInfo.title === title) {
+            if (bookListLocal[i].volumeInfo.title === title && !isProcessed) {
+                isProcessed = true;
                 document.getElementById('bookProfile').style.display = 'flex';
                 document.getElementById('bookImage').src = bookListLocal[i].volumeInfo.imageLinks.thumbnail;
                 document.getElementById('bookName').innerHTML = title.substring(0, 35);
@@ -646,4 +703,15 @@ function displayBookCard(title) {
     }
 }
 
+function displayBookCardFromActivity(title,descFull,src,author,pages,category,rating) {
+    document.getElementById('bookProfile2').style.display = 'flex';
+    document.getElementById('bookImage2').src = src
+    document.getElementById('bookName2').innerHTML = title
+    document.getElementById('bookAuthor2').innerHTML = author
+    document.getElementById('genreIconValue2').innerHTML = category
+    document.getElementById('ratingIconValue2').innerHTML = rating + '/5';
+    document.getElementById('totalPagesIconValue2').innerHTML = pages + ' pages'
+    document.getElementById('bookDescription2').innerHTML = descFull;
+
+}
 
