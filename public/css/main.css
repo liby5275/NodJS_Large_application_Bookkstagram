@@ -4,6 +4,7 @@
   display:inline-block;
   overflow:hidden;
   white-space:nowrap;
+  color: blue;
 }
 
 #activityOuterHeadFirst {    /* For increasing performance 
@@ -16,6 +17,7 @@
 #activityOuterHeadSecond {
   width:0px;
   animation: reveal 7s infinite;
+  color: blue;
 }
 
 #activityOuterHeadSecond span {
@@ -60,7 +62,7 @@ body{
 
 .navigation{
     display: table;
-    margin: 0 auto;
+    margin-left: 27%;
 }
 
 ul#navBar{
@@ -421,7 +423,7 @@ color: #000;
   margin-left: 24%;
   margin-top: 7%;
   border-radius: 30px;
-  background: url('/images/bookProfile.jpg');
+  background: url('/images/brown1.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -818,3 +820,65 @@ color: #000;
   #refreshIcon{
     border-radius: 38px;
   }
+
+  #postButton,
+  #reviewButton,
+  #extraButton{
+    width: 30%;
+    height: 35px;
+  }
+
+  #postButton:hover,
+  #reviewButton:hover,
+  #extraButton:hover{
+    background: #434343;
+    color: #d3d3e0;
+letter-spacing: 1px;
+-webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+-moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+transition: all 0.4s ease 0s;
+  }
+
+  #mainButtons{
+    margin-left: 13%;
+    width: 66.5%;
+    margin-top:3%;
+  }
+
+  #postStatusTextArea
+  {
+    margin-left: 10%;
+    margin-top: 8px;
+  }
+#w3review{
+  border-top: none;
+    
+}  
+
+#postSubmit:hover{
+  background: #434343;
+    color: #d3d3e0;
+letter-spacing: 1px;
+-webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+-moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+box-shadow: 5px 40px -10px rgba(0,0,0,0.57);
+transition: all 0.4s ease 0s;
+}
+
+.activityBlockPara{
+    display: flex;
+    margin: 16px;
+    padding: 32px;
+    border-radius: 32px;
+    flex: 1;
+    margin-bottom: 6%;
+    
+    white-space: pre-wrap;
+}
+
+#postStatusButton{
+  border-style: solid;
+    background: darkgrey;
+
+}

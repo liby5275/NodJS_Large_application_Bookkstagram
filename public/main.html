@@ -46,6 +46,7 @@
                 <div class="currentlyReadingChild">
                     <img id="editIcon" src="/images/Edit.png" width="30" height="30">
                 </div>
+                
             </div>
             <div class="centerContent" id="centerContent">
                 <div id="userProfile" class="modal">
@@ -66,14 +67,28 @@
                     <p id="favBook"></p>
                     <p id="lastReadBook"></p>
                 </div>
+                
                 <section id="search" class="results">
                     <input id="search-box" class="search-box"
                         placeholder="Search books by name, author, genre and etc ..." aria-label="Search books" />
+                        <div id ="mainButtons">
+                        <button id = "postButton" onclick="postStatus()">Post Your Thoughts</button>
+                        <button id = "reviewButton">Review A Book</button>
+                        <button id = "extraButton">Review A Book</button>
+                    </div>
+                    <div id="postStatusTextArea" style="display: none;">
+                        
+                            <textarea id="w3review" name="w3review" rows="10" cols="80">
+                                </textarea>
+                                <a href="#" id="postStatusButton" onClick="saveStatusUpdate()">Post..</a>   
+                        
+                        </div>
                     <div class="list-book search" id="bookListSuggestion">
                         <div class="prompt" id="prompt"></div>
                     </div>
                 </section>
 
+                
                 <div id="bookSuggestionRefresh">
                     
                 </div>
@@ -137,6 +152,7 @@
                 </div>
                 
 
+                
 
             </div>
             <div class="rightContent" id="rightContent">

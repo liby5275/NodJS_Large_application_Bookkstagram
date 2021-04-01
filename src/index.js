@@ -9,6 +9,7 @@ const booksDependency = require('./books')
 const connectionDependency = require('./connect')
 const notificationDependency = require('./notification')
 const activityDependency = require('./activites')
+const statusPostDependency = require('./statusPost')
 const { profileEnd } = require('console')
 
 
@@ -179,6 +180,12 @@ io.on('connect', (socket) => {
         } else {
             socket.emit('noConnection',userName);
         }
+    })
+
+
+    socket.on('savePostUpdate',async ({userName,postContent}) => {
+        await statusPostDependency.addStatusUpdate(userName,postContent)
+        await activityDependency.addactivity(userName,'status',postContent)
     })
 
     socket.on('location', (coords, callback) => {

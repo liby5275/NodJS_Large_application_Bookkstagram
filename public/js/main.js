@@ -16,6 +16,8 @@ const bookSuggestionList = document.getElementById('bookSuggestionList')
 const bookSuggestionRefresh = document.getElementById('bookSuggestionRefresh')
 const refreshIcon = document.getElementById('refreshIcon')
 const activitiesList = document.getElementById('activitiesList')
+const postStatusTextArea = document.getElementById('postStatusTextArea');
+const w3review = document.getElementById('w3review')
 const sidebarTemplate = document.querySelector('#contactlistBar-template').innerHTML
 const notifcslistBartemplate = document.querySelector('#notifcslistBar-template').innerHTML
 
@@ -32,6 +34,7 @@ var favAuthorOfThisUser = '';
 var favGenreOfThisUSer = '';
 var lastReadBookByThisUser = '';
 var descLocal ='';
+var statusAreaToggle = false;
 
 
 /*
@@ -173,7 +176,6 @@ socket.on('getNotifcsResponse', notifcsForCurrentUser => {
 })
 
 socket.on('activites', async activitesTotal => {
-    console.log('hello')
 
     document.getElementById('bookListSuggestion').style.display = "none"
     bookSuggestionList.style.display = "none";
@@ -189,30 +191,13 @@ socket.on('activites', async activitesTotal => {
             var rating = result.rating;
             var desc = result.desc.substring(0, 100) + '.Click on the image to Read more..';
             var descFull = escapeHtml(result.desc);
-            console.log(descFull)
             var header = activity.name + ' is reading ' + data + ' now';
             activitiesList.innerHTML = activitiesList.innerHTML + `<div id="activityOuter"><div id="activityOuterHeadFirst">${activity.name}</div>` +
             `<div id="activityOuterHeadSecond"><span>has marked their current read</span></div></div>`
-              
-        } else if (activity.type === 'lastRead') {
-            var data = activity.data;
-            var result = await extractImage(data)
-            var author = result.author;
-            var imageSrc = result.imageSrc;
-            var rating = result.rating;
-            var desc = result.desc.substring(0, 100) + '.Click on the image to Read more..';
-            var descFull = escapeHtml(result.desc);
-            console.log(descFull)
-            var header = activity.name + ' has finished ' + data;
-            activitiesList.innerHTML = activitiesList.innerHTML + `<div id="activityOuter"><div id="activityOuterHeadFirstFinished">Well Done!</div>` +
-            `<div id="activityOuterHeadSecondFinsihed"><span>${activity.name} has finsihed a book</span></div></div>`
-        } else if (activity.type === 'bookReview') {
 
-        }
-
-        activitiesList.innerHTML = activitiesList.innerHTML + `<div class='activityBlock' style='background: linear-gradient(` +
+            activitiesList.innerHTML = activitiesList.innerHTML + `<div class='activityBlock' style='background: linear-gradient(` +
         getRandomColor()  +
-            `, rgba(0, 156, 158, 3));'>` +
+            `, rgba(0,0,0,0));'>` +
             `<div id="activity-area"><p id="activityHeader">${header}</p>` +
             `<p id="titleInActivity">${data}</p>` +
             `<p id="author">${author}</p>` +
@@ -223,6 +208,48 @@ socket.on('activites', async activitesTotal => {
             `' alt='cover'><a onclick='displayBookCardFromActivity2("${result.title}","${result.author}");' target='_blank'>` +
 
             `</div>`
+              
+        } else if (activity.type === 'lastRead') {
+            var data = activity.data;
+            var result = await extractImage(data)
+            var author = result.author;
+            var imageSrc = result.imageSrc;
+            var rating = result.rating;
+            var desc = result.desc.substring(0, 100) + '.Click on the image to Read more..';
+            var descFull = escapeHtml(result.desc);
+            var header = activity.name + ' has finished ' + data;
+            activitiesList.innerHTML = activitiesList.innerHTML + `<div id="activityOuter"><div id="activityOuterHeadFirstFinished">Well Done!</div>` +
+            `<div id="activityOuterHeadSecondFinsihed"><span>${activity.name} has finsihed a book</span></div></div>`
+
+            activitiesList.innerHTML = activitiesList.innerHTML + `<div class='activityBlock' style='background: linear-gradient(` +
+        getRandomColor()  +
+            `, rgba(0,0,0,0));'>` +
+            `<div id="activity-area"><p id="activityHeader">${header}</p>` +
+            `<p id="titleInActivity">${data}</p>` +
+            `<p id="author">${author}</p>` +
+            `<p id="activityRating">${rating}</p>` +
+            `<p id="activityDesc">${desc}</p>` +
+            `</div>` +
+            `<img class='activityImage' src='${imageSrc}' onclick='displayBookCardFromActivity("${result.title}","${descFull}","${result.imageSrc}","${result.author}","${result.pages}","${result.category}", "${result.rating}");'` +
+            `' alt='cover'><a onclick='displayBookCardFromActivity2("${result.title}","${result.author}");' target='_blank'>` +
+
+            `</div>`
+        } else if (activity.type === 'bookReview') {
+
+        } else if (activity.type === 'status') {
+            var data = activity.data;
+
+            activitiesList.innerHTML = activitiesList.innerHTML + `<div id="activityOuter"><div id="activityOuterHeadFirst">${activity.name}</div>` +
+            `<div id="activityOuterHeadSecond"><span>has shared their thougts with you</span></div></div>`
+            activitiesList.innerHTML = activitiesList.innerHTML + `<div class='activityBlockPara'
+            style='background: linear-gradient(` +
+        getRandomColor()  +
+            `, rgba(0,0,0,0));'>` +
+                `<p>${data}</p>` +
+                `</div>`
+        }
+
+        
 
     })
 
@@ -511,6 +538,31 @@ async function getNotificationsAndMessages(userName) {
 
 function getActivities(userName) {
     socket.emit('fetchActivites', userName);
+}
+
+function postStatus(){
+    if(statusAreaToggle || statusAreaToggle === 'true'){
+        postStatusTextArea.style.display="none"
+        statusAreaToggle=false;
+    }else {
+        postStatusTextArea.style.display="block"
+        statusAreaToggle = true;
+    }
+    
+    w3review.innerHTML='';
+}
+
+
+function saveStatusUpdate(){
+    const postContent = w3review.value;
+    if(postContent != undefined && postContent.length>0){
+    socket.emit('savePostUpdate',{
+        userName:this.userNameLocal,
+        postContent:postContent
+    })}
+    
+    postStatusTextArea.style.display = 'none'
+    
 }
 
 
